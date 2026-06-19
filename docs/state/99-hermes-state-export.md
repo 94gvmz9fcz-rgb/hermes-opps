@@ -2,6 +2,11 @@
 
 ## Build Status
 Telegram complete. GitHub live.
+- Telegram: Complete
+- GitHub: Complete
+- Telegram-driven repo editing: Complete
+- Architecture Review Board: Complete
+- Decisions Log: Complete
 
 ## Infrastructure
 - Host: DigitalOcean Droplet
@@ -57,9 +62,8 @@ Name only. Never values.
 ## Current Critical Path
 1. GitHub
 2. Tailscale
-3. Architecture Review Board
-4. Capability Standard
-5. Memory Design
+3. Capability Standard
+4. Memory Design
 
 ## Next Action
 Implement Tailscale.
