@@ -128,6 +128,49 @@ Good future use cases:
 - State doc compaction.
 - Archive stale notes.
 
+## Critical Refinements
+
+### 1. Do Not Summarize Everything Blindly
+
+"Every Telegram conversation gets summarized" is directionally right but should not mean every message triggers a summary call.
+
+Better rule:
+
+- summarize at phase boundaries
+- summarize when a decision is made
+- summarize when durable preferences emerge
+- summarize before context gets too large
+- skip summarization for throwaway chatter unless Josh asks
+
+This preserves continuity without turning summaries into their own cost center.
+
+### 2. True Zero-LLM Answers Require A Pre-Agent Path
+
+If every Telegram message is first sent to a premium LLM, then reading a state file still saves context tokens but not the initial model call.
+
+For actual $0 answers, Hermy eventually needs one of these:
+
+- gateway command shortcuts that answer from files directly
+- a lightweight pre-router before the main agent
+- scheduled/background summarizers that prepare answerable state
+- deterministic scripts for known queries like status, roadmap, repo state, or workspace checks
+
+Near term, we still reduce cost by keeping context compact. Long term, we reduce cost further by routing some messages around premium inference entirely.
+
+### 3. Retrieval Quality Beats Model Shopping
+
+Local/free models only help if the retrieval packet is good. Bad retrieval plus a cheap model still gives bad answers. The priority is therefore:
+
+1. source-of-truth docs
+2. consistent folder/task/decision schemas
+3. search and retrieval helpers
+4. compact answer packets
+5. model routing
+
+### 4. Use Premium Models For Relationship And Judgment
+
+Cost control should not flatten the Hermy/JStew relationship. Use cheaper/no-model routes for mechanical state questions, but keep premium reasoning available for high-trust moments, ambiguity, design decisions, and personality/relationship work.
+
 ## Current Decision
 
 Memory, retrieval, and state are the real bottlenecks. Local/free models come later. The immediate priority is making Hermy search, read, and maintain shared/private state before spending premium model calls.
