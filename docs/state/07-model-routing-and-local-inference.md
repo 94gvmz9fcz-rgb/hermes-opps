@@ -131,14 +131,18 @@ fallback_reason: retrieval miss | ambiguity | quality | safety | user preference
 Live configuration now uses:
 
 ```text
-display.show_cost = true
+Primary default model  = deepseek/deepseek-chat (direct DeepSeek)
+display.show_cost      = true
 openrouter.response_cache = true
 auxiliary.title_generation = openrouter / qwen/qwen-2.5-7b-instruct
-auxiliary.compression = openrouter / qwen/qwen-2.5-7b-instruct
-delegation = openrouter / deepseek/deepseek-chat-v3-0324
+auxiliary.compression     = openrouter / qwen/qwen-2.5-7b-instruct
+auxiliary.web_extract     = gemini / gemini-2.5-flash-lite
+delegation                = openrouter / deepseek/deepseek-chat-v3-0324
+CloseAI promoted to premium specialist — available for explicit architecture/judgment/personality work.
+Local llama.cpp Qwen 2.5 0.5B server running on 127.0.0.1:18080 for offline/private inference.
 ```
 
-Primary premium model remains OpenAI/default. Restart/reset gateway/session after config changes so the running Telegram agent loads the updated environment.
+Premium/OpenAI is no longer the default. It is preserved for intentional fallback only.
 
 ## Validation Harness
 

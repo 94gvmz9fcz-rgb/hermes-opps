@@ -175,4 +175,4 @@ Cost control should not flatten the Hermy/JStew relationship. Use cheaper/no-mod
 
 ## Current Decision
 
-Memory, retrieval, and state are the real bottlenecks. Local/free models come after or alongside that foundation, not before it. The immediate priority is making Hermy search, read, and maintain shared/private state before spending premium model calls; the next implementation layer is OpenRouter-backed cheap routing plus an iPad/local inference evaluation lane.
+DeepSeek direct key is funded and active. Primary default model is now DeepSeek (`deepseek-chat` via direct API). OpenAI is preserved as premium fallback for explicit architecture/judgment/personality work.
