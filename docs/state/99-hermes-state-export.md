@@ -9,6 +9,8 @@ Telegram complete. GitHub live.
 - Decisions Log: Complete
 - OneDrive private workspace: Complete
 - Memory-first cost architecture: Documented
+- Model routing / local inference plan: Documented
+- Cost Governor skill: Created
 
 ## Infrastructure
 - Host: DigitalOcean Droplet
@@ -37,7 +39,9 @@ Telegram complete. GitHub live.
 
 ## Providers
 - Primary LLM: OpenAI
-- Backup LLM: None
+- Backup LLM: None configured
+- First cheap-model gateway: OpenRouter approved, pending credential/config setup
+- Local inference: iPad/local lane approved for evaluation; not yet configured
 
 ## Installed Integrations
 - Telegram
@@ -68,14 +72,17 @@ Name only. Never values.
 - Tailscale implementation
 
 ## Current Critical Path
-1. iOS Shortcut intake
-2. Retrieval-first memory/state search
-3. Tailscale
-4. Capability Standard
-5. Memory Design
+1. OpenRouter credential/config setup
+2. Model routing validation harness
+3. iOS Shortcut intake
+4. Retrieval-first memory/state search
+5. iPad/local inference evaluation
+6. Tailscale
+7. Capability Standard
+8. Memory Design
 
 ## Next Action
-Build the first iOS Shortcut intake path into Telegram or OneDrive/Hermy/Inbox.
+Add OpenRouter credentials through the real Hermes CLI/auth environment, then run the provider preflight and routing validation matrix.
 
 ## Backlog
 - State export automation

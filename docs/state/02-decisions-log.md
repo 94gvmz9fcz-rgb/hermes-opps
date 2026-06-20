@@ -32,15 +32,15 @@ Each decision should include:
 
 - **Decision:** Begin with iCloud Drive as the likely first capture/storage layer.
 - **Rationale:** Josh primarily uses Apple hardware: iPad Pro M5 and iPhone 16 Pro Max. iCloud is native and low-friction.
-- **Status:** Proposed
-- **Follow-up:** Josh confirms folder name and whether iCloud is acceptable for first implementation.
+- **Status:** Superseded by OneDrive/Hermy as the active Hermy-accessible workspace; iCloud remains useful for Apple-side staging.
+- **Follow-up:** Use iOS Shortcuts or manual sharing to move selected iCloud/camera-roll material into Telegram or OneDrive/Hermy when Hermy should operate on it.
 
 ### 2026-06-19 — Delay OneDrive and Google Drive until needed
 
 - **Decision:** Keep OneDrive and Google Drive available but secondary.
 - **Rationale:** Multi-cloud complexity should wait until there is a specific reason, such as work docs, Gmail/Google integration, or Microsoft account workflows.
-- **Status:** Proposed
-- **Follow-up:** Revisit when a workflow specifically needs Microsoft or Google storage.
+- **Status:** Superseded for OneDrive; OneDrive/Hermy is now active because Microsoft Graph gives Hermy reliable read/write access.
+- **Follow-up:** Keep Google Drive optional until a Google-specific workflow requires it.
 
 ### 2026-06-19 — Hermy should operate as both friend and operator
 
@@ -76,3 +76,17 @@ Each decision should include:
 - **Rationale:** Eliminating unnecessary model calls is higher ROI than replacing OpenAI with one free model.
 - **Status:** Active
 - **Follow-up:** Implement retrieval-first workflows and add model routing later.
+
+### 2026-06-20 — Use OpenRouter as the first cheap-model gateway
+
+- **Decision:** Add OpenRouter before wiring multiple direct model providers.
+- **Rationale:** One provider credential can test Qwen/DeepSeek/Gemini/Llama-style routes and reduce provider sprawl while Hermy learns what workloads actually need cheaper models.
+- **Status:** Approved, pending credential/config setup.
+- **Follow-up:** Add OpenRouter through the real Hermes CLI/auth environment; verify exact model IDs before setting auxiliary/delegation defaults.
+
+### 2026-06-20 — Treat iPad local inference as a serious parallel lane
+
+- **Decision:** Do not dismiss Josh's iPad Pro M5 as local compute. Evaluate it for local/offline/bursty inference while keeping cloud Hermy as the always-on coordinator.
+- **Rationale:** The iPad has meaningful processing power and storage, but iOS background/server constraints may limit always-on model serving. It is likely best for user-initiated local work, private summaries, extraction, and file-based handoff.
+- **Status:** Active evaluation lane.
+- **Follow-up:** After OpenRouter/routing policy is in place, test iPad-local model apps or endpoints and route outputs through OneDrive/Hermy or Telegram.

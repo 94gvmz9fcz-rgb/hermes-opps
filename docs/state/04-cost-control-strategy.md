@@ -64,6 +64,8 @@ Defer or batch:
 - Scheduled batch processing for inboxes.
 - Local embedding/search index if the corpus grows.
 - More advanced model routing: cheap model for simple summarization, stronger model for high-value reasoning.
+- OpenRouter as the first cheap-model gateway once credentials are available.
+- iPad/local inference as a serious parallel lane for bursty private/local work, while keeping the cloud runtime as the always-on coordinator.
 
 ## API Call / Rate-Limit Reduction Tactics
 
@@ -118,5 +120,7 @@ Build the first operating layer with:
 - Hermes skills
 - iOS Shortcuts
 - iCloud Drive as optional Apple-side staging/capture
+- OpenRouter as first cheap-model gateway once credentials are available
+- iPad/local inference as a parallel evaluation lane, not a blocker
 
-Delay heavier integrations and local inference until memory, retrieval, tasks, skills, and state are stable.
+Delay heavier provider sprawl until memory, retrieval, tasks, skills, and state are stable. Do not dismiss the iPad Pro M5 as local compute; evaluate it for local/offline burst work after the routing policy is in place.

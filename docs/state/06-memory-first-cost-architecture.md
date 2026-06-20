@@ -73,13 +73,15 @@ For questions like “what did we decide?” or “what’s next?” Hermy shoul
 
 ## Local / Self-Hosted Inference Path
 
-Do not start here. Local inference is useful, but only after state/retrieval exists.
+Do not start here as the blocking dependency. Local inference is useful, but only after state/retrieval exists.
+
+Josh's iPad Pro M5 is a serious local compute candidate. The constraint is less raw horsepower and more iOS background/server ergonomics. Treat it as a burst/local/private worker lane, while the cloud Hermes runtime remains the always-on coordinator.
 
 Future options:
 
-- Ollama
-- llama.cpp
-- vLLM
+- Ollama or Ollama-compatible endpoint where supported
+- llama.cpp / MLX-style local runtimes
+- vLLM on a cheap GPU instance if sustained load justifies it
 - Qwen
 - Llama
 - DeepSeek
@@ -173,4 +175,4 @@ Cost control should not flatten the Hermy/JStew relationship. Use cheaper/no-mod
 
 ## Current Decision
 
-Memory, retrieval, and state are the real bottlenecks. Local/free models come later. The immediate priority is making Hermy search, read, and maintain shared/private state before spending premium model calls.
+Memory, retrieval, and state are the real bottlenecks. Local/free models come after or alongside that foundation, not before it. The immediate priority is making Hermy search, read, and maintain shared/private state before spending premium model calls; the next implementation layer is OpenRouter-backed cheap routing plus an iPad/local inference evaluation lane.
