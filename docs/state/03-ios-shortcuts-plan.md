@@ -24,7 +24,7 @@ The first shortcuts should be simple, native, cheap, and easy to inspect.
 
 **Input:** File via Share Sheet.
 
-**Output:** Sends the file to Telegram chat with Hermy, or stores it in `iCloud Drive/Hermy/Inbox/` for later processing.
+**Output:** Sends the file to Telegram chat with Hermy, or stores it in `OneDrive/Hermy/Inbox/` once the OneDrive shortcut/API path is configured.
 
 **Why second:** Gives Hermy access to specific files without broad device access.
 
@@ -34,11 +34,13 @@ The first shortcuts should be simple, native, cheap, and easy to inspect.
 
 **Input:** Text, file, photo, PDF, or URL.
 
-**Output:** Saves into an iCloud folder such as:
+**Output:** Saves into a staging inbox. Preferred target is:
 
 ```text
-iCloud Drive/Hermy/Inbox/
+OneDrive/Hermy/Inbox/
 ```
+
+An iCloud folder can still be used as Apple-side staging when it is more convenient on-device.
 
 **Why third:** Cheap, reliable capture that does not require an API call every time.
 
@@ -52,10 +54,11 @@ iCloud Drive/Hermy/Inbox/
 
 **Why later:** Useful after basic capture works.
 
-## Proposed iCloud Folder Structure
+## Active Private Workspace Structure
 
 ```text
-iCloud Drive/Hermy/
+OneDrive/Hermy/
+  _system/
   Inbox/
   Notes/
   Photos/
@@ -65,12 +68,20 @@ iCloud Drive/Hermy/
   Archive/
 ```
 
+## Optional iCloud Staging
+
+```text
+iCloud Drive/Hermy/
+  Inbox/
+```
+
 ## Routing Rules
 
 - Use Telegram for immediate conversation or action.
-- Use iCloud Inbox for passive capture.
+- Use OneDrive/Hermy Inbox for private passive capture that Hermy can access.
+- Use iCloud as optional Apple-side staging when direct OneDrive routing is inconvenient.
 - Use GitHub repo docs for durable operating state, decisions, plans, and workflows.
-- Use OneDrive/Google Drive only when the content naturally lives there or a workflow requires it.
+- Use Google Drive only when a workflow specifically requires it.
 
 ## Low-Cost Design
 

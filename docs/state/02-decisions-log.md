@@ -55,3 +55,24 @@ Each decision should include:
 - **Rationale:** Frequent collaboration should not become expensive or fragile.
 - **Status:** Active
 - **Follow-up:** Use summaries, cached docs, native device tools, open-source utilities, and selective high-value model calls.
+
+### 2026-06-20 — Use OneDrive/Hermy as the active private shared workspace
+
+- **Decision:** OneDrive/Hermy is the active private shared workspace Hermy can read/write through Microsoft Graph.
+- **Rationale:** iCloud sharing is convenient on Apple devices but does not provide reliable agent-side file API access. OneDrive provides a workable private read/write integration.
+- **Status:** Active
+- **Follow-up:** Keep Hermy bounded to `OneDrive/Hermy/` unless Josh explicitly authorizes broader access for a specific task.
+
+### 2026-06-20 — Treat iCloud as staging, not the primary Hermy-readable backend
+
+- **Decision:** iCloud remains useful for Apple-side capture/staging, but OneDrive is the primary Hermy-accessible private workspace.
+- **Rationale:** Josh uses Apple hardware, but iCloud web sharing is not suitable for reliable cloud-agent read/write automation.
+- **Status:** Active
+- **Follow-up:** Build iOS Shortcuts that can route selected items into OneDrive/Hermy or Telegram.
+
+### 2026-06-20 — Prioritize memory/retrieval before local inference
+
+- **Decision:** The cost roadmap prioritizes memory-first retrieval, state docs, skills, tasks, and compression before spending weeks on local model hosting.
+- **Rationale:** Eliminating unnecessary model calls is higher ROI than replacing OpenAI with one free model.
+- **Status:** Active
+- **Follow-up:** Implement retrieval-first workflows and add model routing later.

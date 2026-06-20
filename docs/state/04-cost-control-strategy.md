@@ -93,15 +93,30 @@ Cost saving should not mean:
 - losing source-of-truth clarity
 - over-automating before workflows are understood
 
+## Memory-First Cost Architecture
+
+The biggest cost reducer is not replacing OpenAI with a single free model. It is avoiding unnecessary model calls.
+
+Preferred order:
+
+1. Search memory/state/docs first.
+2. Use deterministic tools for file lookup, git state, and workspace checks.
+3. Build a compact answer packet from retrieved evidence.
+4. Use cheap/local models for routine summarization or extraction when needed.
+5. Use OpenAI/premium models only for high-value reasoning, ambiguity, architecture, sensitive decisions, or hard debugging.
+
+See `06-memory-first-cost-architecture.md` for the detailed plan.
+
 ## Current Recommendation
 
 Build the first operating layer with:
 
 - Telegram
-- iCloud Drive
-- iOS Shortcuts
+- OneDrive/Hermy private workspace
 - GitHub repo docs
 - Hermes memory
 - Hermes skills
+- iOS Shortcuts
+- iCloud Drive as optional Apple-side staging/capture
 
-Delay heavier integrations until a repeated workflow proves the need.
+Delay heavier integrations and local inference until memory, retrieval, tasks, skills, and state are stable.

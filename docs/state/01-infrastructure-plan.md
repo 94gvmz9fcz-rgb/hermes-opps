@@ -12,19 +12,21 @@ Use a hub-and-spoke model:
 
 - **Telegram**: conversation and quick command surface.
 - **GitHub repo**: durable, versioned operating state, decisions, skills, and technical docs.
-- **iCloud Drive**: first personal capture/storage layer because Josh primarily uses Apple hardware.
-- **iOS Shortcuts**: native capture buttons from iPhone/iPad into Telegram, repo intake, or later webhook routes.
+- **OneDrive/Hermy**: active private shared workspace that Hermy can read/write through Microsoft Graph.
+- **iCloud Drive**: Apple-native personal capture/staging layer; useful on-device but not the primary Hermy-readable backend.
+- **iOS Shortcuts**: native capture buttons from iPhone/iPad into Telegram, OneDrive Inbox, or later webhook routes.
 - **Hermes memory**: compact durable personal preferences and stable context.
 - **Hermes skills**: reusable procedures for repeatable workflows.
 - **Cloud Hermes runtime**: always-on executor for terminal, git, scheduled jobs, and integrations.
 
 ## Why This Framework
 
-- It uses tools Josh already has: iPhone, iPad, iCloud, Telegram, GitHub.
+- It uses tools Josh already has: iPhone, iPad, iCloud, OneDrive, Telegram, GitHub.
 - It avoids expensive always-on custom apps at the beginning.
 - It keeps important state in plain Markdown, which is portable and cheap.
+- It gives Hermy a real private read/write workspace through OneDrive while keeping public-ish operating docs in GitHub.
 - It lets Hermy drive implementation in the repo while Josh provides device-side access and decisions.
-- It supports future growth into OneDrive, Google Drive, webhooks, calendar/email, richer automations, or local models.
+- It supports future growth into iOS Shortcuts, Google Drive, webhooks, calendar/email, richer automations, or local models.
 
 ## Phase 1 Scope
 
@@ -32,10 +34,11 @@ Use a hub-and-spoke model:
 
 1. State docs in `docs/state/`.
 2. Repository Maintenance for commit/push/report workflows.
-3. iCloud folder convention for capture.
-4. First iOS Shortcuts plan.
-5. Cost-control strategy.
-6. Clear access checklist for Josh-provided setup.
+3. OneDrive/Hermy private shared workspace.
+4. iCloud as optional Apple-side capture/staging.
+5. First iOS Shortcuts plan.
+6. Cost-control strategy.
+7. Clear access checklist for Josh-provided setup.
 
 ### Out of Scope For Now
 
@@ -50,15 +53,22 @@ Use a hub-and-spoke model:
 ```text
 iPhone / iPad
   ├─ Telegram → Hermy conversation + commands
-  ├─ iCloud Drive/Hermy/ → personal capture files
+  ├─ iCloud Drive/Hermy/ → optional Apple-side staging/capture
   └─ iOS Shortcuts → send notes/files/photos/tasks
 
 Cloud Hermes Runtime
   ├─ Telegram gateway
+  ├─ Microsoft Graph helper → OneDrive/Hermy private workspace
   ├─ Repo tools + git
   ├─ Memory + skills
   ├─ Cron/jobs later if needed
   └─ Optional webhooks later
+
+OneDrive/Hermy
+  ├─ _system/ → private workspace rules and verification files
+  ├─ Inbox/ → raw private capture
+  ├─ Notes/ Documents/ Projects/ Photos/
+  └─ Exports/ Archive/
 
 GitHub Repo
   ├─ docs/state/ → shared operating state
@@ -91,7 +101,13 @@ GitHub Repo
 - `02-decisions-log.md`: durable decisions.
 - `03-ios-shortcuts-plan.md`: device-side automation plan.
 - `04-cost-control-strategy.md`: rules for keeping spend low without quality loss.
+- `05-onedrive-workspace.md`: private workspace boundary and structure.
+- `06-memory-first-cost-architecture.md`: retrieval-first cost architecture.
+
+## Current Status
+
+Phase 1 core bridge is active: Telegram, GitHub repo docs, Repository Maintenance, and OneDrive/Hermy private workspace are working.
 
 ## Next Action
 
-Create the Phase 1 docs, then use Repository Maintenance to review, commit, push, and report the commit hash.
+Build the first iOS Shortcut intake path into Telegram or OneDrive/Hermy/Inbox, then document the working shortcut.

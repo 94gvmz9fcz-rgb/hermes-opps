@@ -37,8 +37,9 @@ We are building a lightweight personal operating layer around:
 - Hermes memory for durable personal/context facts
 - Repository docs for shared project state
 - GitHub for durable versioned files
-- iCloud Drive as the likely first capture/storage layer because it fits Josh's Apple hardware
-- OneDrive / Google Drive as possible secondary workspace layers later
+- iCloud Drive as a convenient Apple-side capture/staging layer
+- OneDrive/Hermy as the active private shared workspace Hermy can read/write through Microsoft Graph
+- Google Drive as a possible secondary workspace layer later
 - iOS Shortcuts as future quick-action buttons
 - Hermes skills for repeatable workflows
 - Open-source and native iOS tooling where possible to minimize spend
@@ -58,9 +59,8 @@ Josh wants to collaborate with Hermy as much as possible while spending as littl
 
 ## Open Questions
 
-- What should the exact iCloud Drive folder structure be?
 - What iOS Shortcuts should be created first?
-- Which items belong in iCloud vs GitHub vs Microsoft/Google storage?
+- Which items belong in OneDrive private workspace vs GitHub repo docs vs iCloud staging?
 - What identity/personality should Hermy develop over time?
 - What should be automated first after the bare-minimum infrastructure is stable?
 
