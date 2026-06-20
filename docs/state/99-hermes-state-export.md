@@ -40,7 +40,9 @@ Telegram complete. GitHub live.
 ## Providers
 - Primary LLM: OpenAI
 - Backup LLM: None configured
-- First cheap-model gateway: OpenRouter approved, pending credential/config setup
+- First cheap-model gateway: OpenRouter configured and smoke-tested
+- Cheap auxiliary model route: `qwen/qwen-2.5-7b-instruct` for title generation and compression
+- Delegation/subagent route: `deepseek/deepseek-chat-v3-0324` via OpenRouter
 - Local inference: iPad/local lane approved for evaluation; not yet configured
 
 ## Installed Integrations
@@ -72,7 +74,7 @@ Name only. Never values.
 - Tailscale implementation
 
 ## Current Critical Path
-1. OpenRouter credential/config setup
+1. Restart/reset Telegram gateway/session so OpenRouter routing config is loaded
 2. Model routing validation harness
 3. iOS Shortcut intake
 4. Retrieval-first memory/state search
@@ -82,7 +84,7 @@ Name only. Never values.
 8. Memory Design
 
 ## Next Action
-Add OpenRouter credentials through the real Hermes CLI/auth environment, then run the provider preflight and routing validation matrix.
+Restart the gateway/session, then run the routing validation matrix against OpenRouter cheap routes and premium fallback.
 
 ## Backlog
 - State export automation

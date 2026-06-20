@@ -14,9 +14,10 @@ As of this document:
 - Compression: enabled.
 - Memory: enabled.
 - OpenRouter response cache setting: enabled.
-- Additional provider credentials visible in the current runtime: not present.
-- Hermes CLI binary was not available on this runtime `PATH`, so config changes must be applied through the real Hermes CLI environment or by the user/operator with the correct profile loaded.
+- Additional provider credentials visible in the current runtime: OpenRouter configured; other cheap/direct providers not configured.
+- Hermes CLI binary is available at `/opt/hermes/.venv/bin/hermes`; it may not be on the default tool shell `PATH`.
 - Local cloud runtime has limited RAM for serious local inference; Josh's iPad Pro M5 should be treated as a promising local compute lane, not ignored.
+- OpenRouter smoke test succeeded using `qwen/qwen-2.5-7b-instruct`.
 
 Do not store API keys, tokens, or local model credentials in this repo.
 
@@ -125,34 +126,19 @@ source_checked: repo docs | session DB | memory | OneDrive | skills | web | none
 fallback_reason: retrieval miss | ambiguity | quality | safety | user preference
 ```
 
-## Configuration Commands Once Hermes CLI Is Available
+## Configuration Applied
 
-Run these from the actual Hermes environment/profile, not from a random shell where `hermes` is missing.
+Live configuration now uses:
 
-```bash
-hermes config set display.show_cost true
-hermes auth add openrouter
-hermes config set openrouter.response_cache true
+```text
+display.show_cost = true
+openrouter.response_cache = true
+auxiliary.title_generation = openrouter / qwen/qwen-2.5-7b-instruct
+auxiliary.compression = openrouter / qwen/qwen-2.5-7b-instruct
+delegation = openrouter / deepseek/deepseek-chat-v3-0324
 ```
 
-Then configure auxiliary tasks after verifying exact model IDs:
-
-```bash
-hermes config set auxiliary.title_generation.provider openrouter
-hermes config set auxiliary.compression.provider openrouter
-hermes config set auxiliary.web_extract.provider openrouter
-```
-
-Candidate model IDs should be verified against the live OpenRouter catalog before setting them.
-
-For delegation after OpenRouter is configured:
-
-```bash
-hermes config set delegation.provider openrouter
-hermes config set delegation.model <verified-deepseek-or-qwen-model-id>
-```
-
-Restart/reset gateway/session after config changes.
+Primary premium model remains OpenAI/default. Restart/reset gateway/session after config changes so the running Telegram agent loads the updated environment.
 
 ## Validation Harness
 
