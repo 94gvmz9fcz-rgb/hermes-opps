@@ -1,0 +1,17 @@
+# Hermes Agent Configuration
+# Stored at ~/.hermes/config.yaml — loaded at session start
+
+stt:
+  enabled: true
+  provider: local
+  local:
+    model: tiny     # tiny = fastest, base = more accurate, small/big = more
+
+tts:
+  provider: edge
+
+# Gateways
+gateway:
+  platforms:
+    telegram:
+      enabled: true
