@@ -115,3 +115,12 @@ Each decision should include:
 - **Consequences:** Nothing is ever lost. Processing is always a secondary opt-in. One drive structure expanded: `Inbox/`, `Read Later/`, `Captures/` alongside the existing `Junk Drawer/`.
 - **Reversal cost:** Low (revert to per-file manual handling; folder structure stays clean)
 - **Status:** Active
+
+### 2026-06-22 — Herms Dashboard: single-page operating layer
+
+- **Decision:** Create `docs/herms/DASHBOARD.md` — a single markdown doc as the personal operating layer home base.
+- **Design:** Six sections — Active, Next Up, Recent Decisions, Pipeline Status, OneDrive Layout, Quick Stats. Phone-readable in <10 seconds. Cross-references the decisions log, state docs, and skills.
+- **Rationale:** The repo has pieces (decisions log, HERMS.md, state docs) but no single page to answer "what are we even doing." Josh needs a glance-level overview he can open on his phone without clicking through 5 docs.
+- **Consequences:** Dashboard updates silently after every significant interaction — no notification spam. Josh checks it when he wants orientation. Reduces "where were we" friction significantly over time.
+- **Reversal cost:** Low (delete one doc, nothing else breaks)
+- **Status:** Active
