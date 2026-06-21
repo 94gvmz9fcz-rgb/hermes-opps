@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Nightly state export — sync docs/state/* to OneDrive."""
-import subprocess, os, sys, shutil
+import glob, subprocess, os, sys, shutil, time
 from datetime import date
 import tempfile
 
@@ -53,3 +53,19 @@ else:
     print("OneDrive upload unavailable: graph helper not found")
 
 print("State export complete.")
+
+# --- EOL and Temp Pruning ---
+
+# Clean up stale temp files
+for pattern in ["/opt/data/tmp*", "/opt/data/tmp_*"]:
+    for f in glob.glob(pattern):
+        if os.path.isfile(f):
+            os.remove(f)
+            print(f"Removed stale temp: {f}")
+
+# Clean up local exports older than 7 days
+export_dir = os.path.dirname(LOCAL_EXPORT)
+for f in glob.glob(os.path.join(export_dir, "hermes-state-export-*.md")):
+    if os.path.getmtime(f) < time.time() - 7 * 86400:
+        os.remove(f)
+        print(f"Removed old export: {f}")

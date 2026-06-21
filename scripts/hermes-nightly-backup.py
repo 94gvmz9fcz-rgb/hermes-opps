@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Nightly Hermes backup — tarball to /opt/data/backups/ and OneDrive."""
-import subprocess, tarfile, os, sys
+import glob, subprocess, tarfile, os, sys, time
 from datetime import date
 
 BACKUP_DIR = "/opt/data/backups"
@@ -51,11 +51,24 @@ if os.path.exists(GRAPH_SCRIPT):
 else:
     print("OneDrive upload unavailable: graph helper not found")
 
+# Clean up stale temp files
+for pattern in ["/opt/data/tmp*", "/opt/data/tmp_*"]:
+    for f in glob.glob(pattern):
+        if os.path.isfile(f) and f != ARCHIVE_PATH:
+            os.remove(f)
+            print(f"Removed stale temp: {f}")
+
 # Clean up backups older than 7 days
-import glob, time
 for f in glob.glob(os.path.join(BACKUP_DIR, "hermes-backup-*.tar.gz")):
     if os.path.getmtime(f) < time.time() - 7 * 86400:
         os.remove(f)
         print(f"Removed old backup: {f}")
+
+# Clean up state exports older than 7 days
+export_dir = os.path.join(HOME_DIR, "exports")
+for f in glob.glob(os.path.join(export_dir, "hermes-state-export-*.md")):
+    if os.path.getmtime(f) < time.time() - 7 * 86400:
+        os.remove(f)
+        print(f"Removed old state export: {f}")
 
 print("Backup complete.")
