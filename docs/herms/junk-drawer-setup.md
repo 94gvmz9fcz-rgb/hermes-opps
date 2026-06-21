@@ -1,18 +1,50 @@
-# 🗂️ Junk Drawer — iCloud → Herms File Pipeline
+# 🗂️ Junk Drawer — The Universal Intake
 
-## The Pipeline
+**One pipeline. Three input types.** All thought → Herms, no friction.
 
 ```
-You save a file to "→ Junk Drawer" in iCloud
-        ↓ (Shortcut Automation — auto-sends to Telegram)
-Bot sends it as a document with caption "junk"
-        ↓ (Gateway receives, I see it)
-I download, assess, and save to OneDrive/Hermy/Junk Drawer/
-        ↓ (I notify you what I did)
-You see "📥 Landed in Junk Drawer" with my assessment
+You do something
+        ↓
+It arrives in this chat
+        ↓
+I capture by default → ask one question → act on your reply
 ```
 
-## What You Do on iPhone (~2 min)
+**Capture is the default.** Nothing is ever lost. Processing is a second step you opt into.
+
+---
+
+## The Three Inputs
+
+### 1. Drop a file
+Any file via the iCloud Junk Drawer folder or directly in chat.
+
+**I do:**
+1. Extract/describe what's in it
+2. Save to `OneDrive/Hermy/Inbox/` with a clean filename
+3. Say: *"📥 Got it — save, process (extract data), add to a task, or file somewhere?"*
+
+### 2. Send a link
+Any URL in the chat.
+
+**I do:**
+1. Fetch the page → summarise it in 2-3 bullets
+2. Say: *"🔗 Here's the gist — save to Read Later, add context to a task, or ignore?"*
+
+### 3. Type a half-thought
+A fragment, a single word, a vibe.
+
+**I do:**
+- If it's obviously a command → execute it
+- If it's ambiguous → ask one clarifying question (not three)
+- If it's clearly a note fragment → save to `OneDrive/Hermy/Captures/` and say *"📝 Captured"*
+- If you want to tell me to hold a thought without action → end with `→cap` and it's captured silently
+
+---
+
+## Setup: iCloud → Telegram File Drop (~2 min)
+
+This sends any file you drop into an iCloud folder directly to me.
 
 ### Step 1: Create the iCloud folder
 1. Open **Files** app

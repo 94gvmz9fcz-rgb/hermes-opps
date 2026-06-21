@@ -104,3 +104,14 @@ Each decision should include:
 - **Rationale:** The ruleset Josh created at Settings → Rules → Rulesets is decorative on a free private repo. Self-enforcement gives the same safety without paying for GitHub Team.
 - **Status:** Active. Self-enforcement begins now.
 - **Follow-up:** If the repo ever moves to a Team organization, re-enable the ruleset for real enforcement.
+
+### 2026-06-22 — Read My Mind intake: universal capture-first pipeline
+
+- **Decision:** Upgrade the Junk Drawer pipeline from file-only to a universal intake handling three input types with consistent capture-first defaults:
+  - **Files** → extract, save to OneDrive/Hermy/Inbox/, ask what to do next
+  - **Links** → fetch + summarize in 2-3 bullets, ask save/follow-up/ignore
+  - **Half-thoughts** → obvious commands execute, ambiguous gets one clarifying question, clear fragments save to Captures/, `→cap` suffix = silent capture
+- **Rationale:** The Junk Drawer shortcut infrastructure already exists (iCloud folder → Telegram bot). The gap was post-landing behavior — files were just saved, not categorized or acted on. No new infrastructure needed; this upgrades the response to inbound content.
+- **Consequences:** Nothing is ever lost. Processing is always a secondary opt-in. One drive structure expanded: `Inbox/`, `Read Later/`, `Captures/` alongside the existing `Junk Drawer/`.
+- **Reversal cost:** Low (revert to per-file manual handling; folder structure stays clean)
+- **Status:** Active
