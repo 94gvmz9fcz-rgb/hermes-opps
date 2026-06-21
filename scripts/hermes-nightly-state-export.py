@@ -1,86 +1,49 @@
 #!/usr/bin/env python3
-"""Nightly state export — writes state docs and metadata to OneDrive."""
+"""Nightly state export — sync docs/state/* to OneDrive."""
+import subprocess, os, sys, shutil
+from datetime import date
+import tempfile
 
-from __future__ import annotations
+REPO_DIR = "/opt/data/repo"
+STATE_DIR = os.path.join(REPO_DIR, "docs", "state")
+HOME_DIR = "/opt/data"
+TODAY = date.today().isoformat()
+EXPORT_NAME = f"hermes-state-export-{TODAY}.md"
+LOCAL_EXPORT = os.path.join(HOME_DIR, "exports", EXPORT_NAME)
 
-import datetime as dt
-import json
-import os
-import subprocess
-import sys
-from pathlib import Path
+os.makedirs(os.path.join(HOME_DIR, "exports"), exist_ok=True)
 
-REPO = Path("/opt/data/repo/docs/state")
-GRAPH_HELPER = Path("/opt/data/home/.config/hermy/onedrive_graph.py")
-ONE_DRIVE_TARGET = "/Hermy/_system/state-exports"
+if not os.path.isdir(STATE_DIR):
+    print("State directory not found — nothing to export.")
+    sys.exit(1)
 
+# Collect and concatenate all state docs
+state_files = sorted(f for f in os.listdir(STATE_DIR) if f.endswith(".md"))
+if not state_files:
+    print("No state files found.")
+    sys.exit(0)
 
-def collect_state() -> dict[str, str]:
-    """Read current state docs and metadata into a dict."""
-    items: dict[str, str] = {}
-    
-    if REPO.exists():
-        for md in sorted(REPO.glob("*.md")):
-            items[md.name] = md.read_text()
-    
-    # Add memory contents if accessible
-    mem_path = Path("/opt/data/memories")
-    if mem_path.exists():
-        for mem_file in mem_path.glob("*.md"):
-            items[mem_file.name] = mem_file.read_text()
-    
-    # Add skill inventory
-    skills_path = Path("/opt/data/skills")
-    inventory: list[dict] = []
-    if skills_path.exists():
-        for skill_md in skills_path.rglob("SKILL.md"):
-            name = skill_md.parent.name
-            cat = skill_md.parent.parent.name
-            inventory.append({"name": name, "category": cat})
-    items["skill-inventory.json"] = json.dumps(inventory, indent=2)
-    
-    return items
+with open(LOCAL_EXPORT, "w") as out:
+    out.write(f"# Hermes State Export — {TODAY}\n\n")
+    for fname in state_files:
+        fpath = os.path.join(STATE_DIR, fname)
+        with open(fpath) as f:
+            out.write(f"---\n## {fname}\n\n")
+            out.write(f.read())
+            out.write("\n\n")
 
+print(f"State export written: {LOCAL_EXPORT} ({os.path.getsize(LOCAL_EXPORT)} bytes)")
 
-def upload_to_onedrive(state: dict[str, str]) -> bool:
-    """Upload state files to a dated folder in OneDrive."""
-    if not GRAPH_HELPER.exists():
-        return False
-    
-    try:
-        ns: dict = {}
-        exec(GRAPH_HELPER.read_text().replace('if __name__ == "__main__":', "if False:"), ns)
-        
-        root = ns["workspace"]()
-        system = ns["ensure_folder"](root["id"], "_system")
-        exports = ns["ensure_folder"](system["id"], "state-exports")
-        
-        today = dt.date.today().isoformat()
-        dated = ns["ensure_folder"](exports["id"], today)
-        
-        for filename, content in state.items():
-            ns["put_text"](dated["id"], filename, content)
-        
-        return True
-    except Exception:
-        return False
-
-
-def main() -> int:
-    print("Starting nightly state export...")
-    
-    state = collect_state()
-    print(f"Collected {len(state)} state files")
-    
-    if upload_to_onedrive(state):
-        print("Uploaded to OneDrive/Hermy/_system/state-exports/")
+# OneDrive upload
+onedrive_path = f"OneDrive/Hermy/_system/state-exports/{TODAY}/"
+onedrive_cmd = ["rclone", "copy", LOCAL_EXPORT, f"hermes_onedrive:{onedrive_path}", "--verbose"]
+try:
+    result = subprocess.run(onedrive_cmd, capture_output=True, text=True, timeout=60)
+    if result.returncode == 0:
+        print(f"OneDrive uploaded: {onedrive_path}{EXPORT_NAME}")
     else:
-        print("ERROR: OneDrive upload failed")
-        return 1
-    
-    print("State export complete.")
-    return 0
+        print(f"OneDrive upload skipped or failed: {result.stderr.strip()}")
+except (FileNotFoundError, subprocess.TimeoutExpired) as e:
+    print(f"OneDrive upload unavailable: {e}")
 
-
-if __name__ == "__main__":
-    raise SystemExit(main())
+print("State export complete.")
