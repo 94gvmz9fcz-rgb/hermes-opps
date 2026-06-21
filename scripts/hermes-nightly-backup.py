@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Nightly Hermes backup — tarball to /opt/data/backups/ and OneDrive."""
-import subprocess, tarfile, os, sys
+import glob, subprocess, tarfile, os, sys, time
 from datetime import date
 
 BACKUP_DIR = "/opt/data/backups"
@@ -34,22 +34,41 @@ with tarfile.open(ARCHIVE_PATH, "w:gz") as tar:
 
 print(f"Backup written: {ARCHIVE_PATH} ({os.path.getsize(ARCHIVE_PATH)} bytes)")
 
-# OneDrive upload via rclone or gws
-onedrive_cmd = ["rclone", "copy", ARCHIVE_PATH, f"hermes_onedrive:{ONEDRIVE_BACKUP}", "--verbose"]
-try:
-    result = subprocess.run(onedrive_cmd, capture_output=True, text=True, timeout=60)
-    if result.returncode == 0:
-        print(f"OneDrive uploaded: {ONEDRIVE_BACKUP}")
-    else:
-        print(f"OneDrive upload skipped or failed: {result.stderr.strip()}")
-except (FileNotFoundError, subprocess.TimeoutExpired) as e:
-    print(f"OneDrive upload unavailable: {e}")
+# OneDrive upload via Graph API (no rclone needed)
+GRAPH_SCRIPT = os.path.expanduser("~/.config/hermy/onedrive_graph.py")
+if os.path.exists(GRAPH_SCRIPT):
+    try:
+        result = subprocess.run(
+            ["python3", GRAPH_SCRIPT, "upload", ARCHIVE_PATH, ONEDRIVE_BACKUP],
+            capture_output=True, text=True, timeout=60
+        )
+        if result.returncode == 0:
+            print(f"OneDrive uploaded: {ONEDRIVE_BACKUP}")
+        else:
+            print(f"OneDrive upload failed: {result.stderr.strip()}")
+    except Exception as e:
+        print(f"OneDrive upload unavailable: {e}")
+else:
+    print("OneDrive upload unavailable: graph helper not found")
+
+# Clean up stale temp files
+for pattern in ["/opt/data/tmp*", "/opt/data/tmp_*"]:
+    for f in glob.glob(pattern):
+        if os.path.isfile(f) and f != ARCHIVE_PATH:
+            os.remove(f)
+            print(f"Removed stale temp: {f}")
 
 # Clean up backups older than 7 days
-import glob, time
 for f in glob.glob(os.path.join(BACKUP_DIR, "hermes-backup-*.tar.gz")):
     if os.path.getmtime(f) < time.time() - 7 * 86400:
         os.remove(f)
         print(f"Removed old backup: {f}")
+
+# Clean up state exports older than 7 days
+export_dir = os.path.join(HOME_DIR, "exports")
+for f in glob.glob(os.path.join(export_dir, "hermes-state-export-*.md")):
+    if os.path.getmtime(f) < time.time() - 7 * 86400:
+        os.remove(f)
+        print(f"Removed old state export: {f}")
 
 print("Backup complete.")
