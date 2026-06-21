@@ -9,10 +9,11 @@
 | What | Status | Started | Note |
 |---|---|---|---|
 | Read My Mind intake | ✅ Live | 06-22 | Universal capture-first pipeline active |
-| Airtable CRM | 🟢 Ready for CRM — token live, 16 fields set | 06-21 | Token recovered, tested, stored |
-| Memory compression cron | ✅ Live | 06-22 | 02:45 UTC daily — keeps memory below 60% |
-| Work brain — Phase 1 & 2 | 🟢 Built | 06-22 | `docs/josh/` — 5 docs: profile, landscape, playbook, decision framework, study plan |
-| Siri Shortcut → Herms | 🔄 Built, untested | 06-21 | Shortcut setup guide ready, test pending |
+| Hybrid Architecture (local offload) | ✅ LIVE | 06-22 | ChromaDB seeded, query bridge works, hourly indexer, →local command |
+| Airtable CRM | 🟢 Ready — token live, 16 fields set | 06-21 | Awaiting Josh's black book data |
+| Memory compression cron | ✅ Live | 06-22 | 02:45 UTC daily |
+| Work brain — Phase 1 & 2 | 🟢 Built | 06-22 | `docs/josh/` — 5 docs |
+| Siri Shortcut → Herms | 🔄 Untested | 06-21 | Guide ready
 
 ---
 
@@ -99,7 +100,8 @@ Full details and daily journals: [decisions-log.md](../state/02-decisions-log.md
 | Check | Threshold | Current | Status |
 |---|---|---|---|
 | Memory | < 85% | 45% | ✅ |
-| Crons | All running | 6 active | ✅ |
+| Crons | All running | 7 active | ✅ |
+| Hybrid DB | Running | 42 chunks, 6 files | ✅ |
 | Token budget | Monthly limit | Tracking | ✅ |
 | Disk | < 90% | TBD | ⏳ |
 
