@@ -9,9 +9,9 @@
 | What | Status | Started | Note |
 |---|---|---|---|
 | Read My Mind intake | ✅ Live | 06-22 | Universal capture-first pipeline active |
-| Airtable CRM | 🟢 Ready for CRM — token live, 16 fields set | 06-21 | Token recovered, tested, stored. Base has Company, Email, Phone, LinkedIn, etc. |
+| Airtable CRM | 🟢 Ready for CRM — token live, 16 fields set | 06-21 | Token recovered, tested, stored |
 | Memory compression cron | ✅ Live | 06-22 | 02:45 UTC daily — keeps memory below 60% |
-| Decision log | ✅ Enriched | 06-22 | Journal format added, daily entries now permanent record |
+| Work brain — Phase 1 & 2 | 🟢 Built | 06-22 | `docs/josh/` — 5 docs: profile, landscape, playbook, decision framework, study plan |
 | Siri Shortcut → Herms | 🔄 Built, untested | 06-21 | Shortcut setup guide ready, test pending |
 
 ---
