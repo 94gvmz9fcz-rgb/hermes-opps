@@ -34,16 +34,22 @@ with tarfile.open(ARCHIVE_PATH, "w:gz") as tar:
 
 print(f"Backup written: {ARCHIVE_PATH} ({os.path.getsize(ARCHIVE_PATH)} bytes)")
 
-# OneDrive upload via rclone or gws
-onedrive_cmd = ["rclone", "copy", ARCHIVE_PATH, f"hermes_onedrive:{ONEDRIVE_BACKUP}", "--verbose"]
-try:
-    result = subprocess.run(onedrive_cmd, capture_output=True, text=True, timeout=60)
-    if result.returncode == 0:
-        print(f"OneDrive uploaded: {ONEDRIVE_BACKUP}")
-    else:
-        print(f"OneDrive upload skipped or failed: {result.stderr.strip()}")
-except (FileNotFoundError, subprocess.TimeoutExpired) as e:
-    print(f"OneDrive upload unavailable: {e}")
+# OneDrive upload via Graph API (no rclone needed)
+GRAPH_SCRIPT = os.path.expanduser("~/.config/hermy/onedrive_graph.py")
+if os.path.exists(GRAPH_SCRIPT):
+    try:
+        result = subprocess.run(
+            ["python3", GRAPH_SCRIPT, "upload", ARCHIVE_PATH, ONEDRIVE_BACKUP],
+            capture_output=True, text=True, timeout=60
+        )
+        if result.returncode == 0:
+            print(f"OneDrive uploaded: {ONEDRIVE_BACKUP}")
+        else:
+            print(f"OneDrive upload failed: {result.stderr.strip()}")
+    except Exception as e:
+        print(f"OneDrive upload unavailable: {e}")
+else:
+    print("OneDrive upload unavailable: graph helper not found")
 
 # Clean up backups older than 7 days
 import glob, time

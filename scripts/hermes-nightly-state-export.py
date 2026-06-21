@@ -34,16 +34,22 @@ with open(LOCAL_EXPORT, "w") as out:
 
 print(f"State export written: {LOCAL_EXPORT} ({os.path.getsize(LOCAL_EXPORT)} bytes)")
 
-# OneDrive upload
-onedrive_path = f"OneDrive/Hermy/_system/state-exports/{TODAY}/"
-onedrive_cmd = ["rclone", "copy", LOCAL_EXPORT, f"hermes_onedrive:{onedrive_path}", "--verbose"]
-try:
-    result = subprocess.run(onedrive_cmd, capture_output=True, text=True, timeout=60)
-    if result.returncode == 0:
-        print(f"OneDrive uploaded: {onedrive_path}{EXPORT_NAME}")
-    else:
-        print(f"OneDrive upload skipped or failed: {result.stderr.strip()}")
-except (FileNotFoundError, subprocess.TimeoutExpired) as e:
-    print(f"OneDrive upload unavailable: {e}")
+# OneDrive upload via Graph API (no rclone needed)
+GRAPH_SCRIPT = os.path.expanduser("~/.config/hermy/onedrive_graph.py")
+onedrive_path = f"Hermy/_system/state-exports/{TODAY}/{EXPORT_NAME}"
+if os.path.exists(GRAPH_SCRIPT):
+    try:
+        result = subprocess.run(
+            ["python3", GRAPH_SCRIPT, "upload", LOCAL_EXPORT, onedrive_path],
+            capture_output=True, text=True, timeout=60
+        )
+        if result.returncode == 0:
+            print(f"OneDrive uploaded: {onedrive_path}")
+        else:
+            print(f"OneDrive upload failed: {result.stderr.strip()}")
+    except Exception as e:
+        print(f"OneDrive upload unavailable: {e}")
+else:
+    print("OneDrive upload unavailable: graph helper not found")
 
 print("State export complete.")
