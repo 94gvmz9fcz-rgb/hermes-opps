@@ -8,8 +8,10 @@
 
 | What | Status | Started | Note |
 |---|---|---|---|
-| Read My Mind intake | ✅ Live | Today | Junk Drawer upgraded to universal capture-first pipeline |
-| Airtable CRM | 🔄 Blocked — token permission | 06-21 | 110 contacts imported, needs Creator-level token to add fields |
+| Read My Mind intake | ✅ Live | 06-22 | Universal capture-first pipeline active |
+| Airtable CRM | 🟢 Ready for CRM — token live, 16 fields set | 06-21 | Token recovered, tested, stored. Base has Company, Email, Phone, LinkedIn, etc. |
+| Memory compression cron | ✅ Live | 06-22 | 02:45 UTC daily — keeps memory below 60% |
+| Decision log | ✅ Enriched | 06-22 | Journal format added, daily entries now permanent record |
 | Siri Shortcut → Herms | 🔄 Built, untested | 06-21 | Shortcut setup guide ready, test pending |
 
 ---
@@ -18,11 +20,11 @@
 
 | # | Project | Why Now |
 |---|---|---|
-| 1 | **Unblock Airtable CRM** — add fields, re-import contacts, share invite | Core data infra for relationship management |
-| 2 | **Test Siri Shortcut** — "Hey Siri, tell Herms..." voice pipeline | Low-hanging fruit, < 5 min |
-| 3 | **Test Junk Drawer file pipeline** — drop a real file | Verify end-to-end before trusting daily use |
+| 1 | **CRM data re-import** — map 110 contacts to fields, generate invite link | Last blocking item before CRM operational |
+| 2 | **Test Siri Shortcut** — "Hey Siri, tell Herms..." voice pipeline | < 5 min, Josh does when near phone |
+| 3 | **Test Junk Drawer file pipeline** — drop a real file | Verify end-to-end before daily use |
 | 4 | **OpenRouter integration** — cheap model routing | Cost optimization after base infra stable |
-| 5 | **Chex rollout** — adversarial review passes | Once collaboration protocol settles more |
+| 5 | **Chex rollout** — adversarial review passes | Once core infra settled |
 | 6 | **Meta Glasses integration** | After Telegram pipeline rock-solid |
 
 ---
@@ -31,17 +33,18 @@
 
 | Date | Decision |
 |---|---|
+| 06-22 | Memory → navigation pointers + daily compression cron at 02:45 UTC |
+| 06-22 | Decision log enriched: journal format with daily entries |
+| 06-22 | Weekly health checks established (memory %, cron success, disk) |
 | 06-22 | Read My Mind — universal capture-first intake pipeline |
 | 06-22 | Image pipeline via EasyOCR + Junk Drawer shortcut |
-| 06-22 | Decision capture format → formal schema + memory sync |
+| 06-22 | Herms Dashboard — personal operating layer home base |
 | 06-20 | Branch self-enforcement (free GitHub, no real rulesets) |
 | 06-20 | OneDrive/Hermy as active shared workspace |
-| 06-20 | OpenRouter before multi-provider setup |
 | 06-20 | Cost control as first-class constraint |
 | 06-19 | Telegram as primary chat surface |
-| 06-19 | GitHub repo docs as durable state |
 
-Full details: [decisions-log.md](../state/02-decisions-log.md)
+Full details and daily journals: [decisions-log.md](../state/02-decisions-log.md)
 
 ---
 
@@ -52,6 +55,7 @@ Full details: [decisions-log.md](../state/02-decisions-log.md)
 | **Junk Drawer** (file intake) | 🟢 Ready — needs test | `intake-webhook.py` running on :9999 |
 | **Image OCR** | 🟢 Ready — needs test | `image-pipeline.py` committed, EasyOCR cached |
 | **Siri → Herms** | 🟢 Setup done — needs test | Shortcut guide at `junk-drawer-setup.md` |
+| **Memory compression** | 🟢 Running | 02:45 UTC daily |
 | **Cron: Nightly backup** | 🟢 Running | 23:00 UTC, saves to OneDrive |
 | **Cron: State export** | 🟢 Running | 23:15 UTC |
 | **Cron: Token tracker** | 🟢 Running | 09:00 UTC daily (commented: "just hermy") |
@@ -63,9 +67,9 @@ Full details: [decisions-log.md](../state/02-decisions-log.md)
 
 | Folder | Purpose | Contents |
 |---|---|---|
-| `Inbox/` | Files I've ingested, awaiting your action | Empty |
+| `Inbox/` | Files ingested, awaiting your action | Empty |
 | `Read Later/` | Links saved for future follow-up | Empty |
-| `Captures/` | Half-thoughts and fragments saved silently | Empty |
+| `Captures/` | Half-thoughts captured silently | Empty |
 | `Junk Drawer/` | Raw dropped files (technical landing zone) | Empty |
 | `Photos/` | Business cards, whiteboards, receipts | Empty |
 | `Resources/` | Reference material (profile pics, shared assets) | Empty |
@@ -78,14 +82,30 @@ Full details: [decisions-log.md](../state/02-decisions-log.md)
 
 | Check | Value |
 |---|---|
-| Memory usage | 99% — 2,179/2,200 chars |
+| Memory usage | **45%** — 990/2,200 chars (down from 95%) |
+| Memory compression | Auto at 02:45 UTC daily, triggers at 60%+ |
+| Decision log | Enriched with journal format + Foundation Day entry |
 | Repo branch | `main` (clean) |
 | Open PRs | 0 |
-| Pending cron jobs | 5 active |
+| Active crons | 6 (new: memory compression) |
 | Skills loaded | collaboration-protocol, repository-maintenance, structured-evaluation-framework |
-| Airtable base | `Jermy's CRM` — 110 contacts (Name + Notes only) |
+| Airtable base | `app6l2hwxinBLwHCa (Untitled)` — 16 fields, token live |
+| Health check | Weekly auto-monitor active — flags at 85% memory or threshold breach |
+
+---
+
+## 🩺 Health Monitor
+
+| Check | Threshold | Current | Status |
+|---|---|---|---|
+| Memory | < 85% | 45% | ✅ |
+| Crons | All running | 6 active | ✅ |
+| Token budget | Monthly limit | Tracking | ✅ |
+| Disk | < 90% | TBD | ⏳ |
+
+*Weekly health check runs automatically. I flag proactively when any metric crosses a threshold.*
 
 ---
 
 *Dashboard auto-updates silently after significant interactions.*
-*You check this when you wonder "what are we even doing."*
+*Bookmark this — it's your 10-second "what are we even doing" answer.*

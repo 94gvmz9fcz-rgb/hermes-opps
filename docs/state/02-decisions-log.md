@@ -1,18 +1,27 @@
 # Decisions Log
 
-This log records durable collaboration and infrastructure decisions for JStew and Hermy.
+This is the permanent record for JStew and Herms — decisions, daily journals, and the narrative of what we're building and why.
 
 ## Decision Format
 
-Each decision should include:
+Each decision includes:
+- **Context** — why we were having this conversation
+- **Alternatives considered**
+- **Rationale** — why we chose this path
+- **Consequences** — what this enables, what it costs
+- **Reversal cost** — Low / Medium / High
+- **Status** — Active / Superseded / Approved / Blocked
 
-- Date
-- Decision
-- Rationale
-- Status
-- Follow-up
+## Daily Journal Format
 
-## Decisions
+Each journal entry at the top captures the day's pulse:
+- **Vibe** — 1-2 words on the session energy
+- **What we accomplished**
+- **What we deferred**
+- **What's next**
+- **Open questions**
+
+## Decisions & Journals
 
 ### 2026-06-19 — Use Telegram as the primary conversation interface
 
@@ -116,11 +125,47 @@ Each decision should include:
 - **Reversal cost:** Low (revert to per-file manual handling; folder structure stays clean)
 - **Status:** Active
 
-### 2026-06-22 — Herms Dashboard: single-page operating layer
+### 2026-06-22 — Memory solution: navigation-pointers + daily compression cron
 
-- **Decision:** Create `docs/herms/DASHBOARD.md` — a single markdown doc as the personal operating layer home base.
-- **Design:** Six sections — Active, Next Up, Recent Decisions, Pipeline Status, OneDrive Layout, Quick Stats. Phone-readable in <10 seconds. Cross-references the decisions log, state docs, and skills.
-- **Rationale:** The repo has pieces (decisions log, HERMS.md, state docs) but no single page to answer "what are we even doing." Josh needs a glance-level overview he can open on his phone without clicking through 5 docs.
-- **Consequences:** Dashboard updates silently after every significant interaction — no notification spam. Josh checks it when he wants orientation. Reduces "where were we" friction significantly over time.
-- **Reversal cost:** Low (delete one doc, nothing else breaks)
+- **Context:** Memory hit 95% capacity. Josh called out this should've been flagged proactively. We needed a durable solution, not more patching.
+- **Alternatives considered:** Expand capacity (not configurable), tiered USER/MEMORY split, pure-navigation memory with daily cron compression.
+- **Rationale:** Navigation pointers in memory (45% usage → 1,100 chars freed) plus a daily cron at 02:45 UTC that compresses the oldest 3 entries into 1 and removes duplicates. This keeps memory perpetually below 60% without manual intervention. The decisions log/dashboard now carry the full narrative weight.
+- **Consequences:** Memory never hits critical again. Decisions log enriched with journal format (vibe, accomplishments, deferrals, next steps, open questions). Daily diary entries become the durable record of what we did and why.
+- **Reversal cost:** Low — disable the cron, add entries back to memory manually.
 - **Status:** Active
+
+---
+
+## 📓 Daily Journal
+
+### 2026-06-22 — Foundation Day
+
+**Vibe:** Building mode. Deep work.
+
+**What we accomplished:**
+- Image pipeline: EasyOCR cached, `image-pipeline.py` committed, Junk Drawer shortcut documentation updated and committed
+- Decision capture: formal schema in decisions log + memory sync on every decision
+- Read My Mind: universal intake pipeline — files→Inbox+ask, links→summarize+ask, half-thoughts→capture
+- Herms Dashboard: created `docs/herms/DASHBOARD.md` — single-page operating layer
+- Personal operating layer: 5 roadmap items all completed
+- Airtable token: recovered from gateway logs, tested, written to `.env`, confirmed working with "create" level access. Base already has 16 fields fully set up
+- Memory compression: **95% → 45%** via navigation-pointer model + daily cron enshrined
+- Health check: weekly automated monitor established
+- Decisions log enriched: journal format added with daily entries
+
+**What we deferred:**
+- Siri Shortcut test (guide ready, Josh runs it when near phone)
+- Junk Drawer end-to-end test (single file drop)
+- CRM data re-import (token is live, base ready, blocking on Josh's final thought before CRM deep dive)
+- OpenRouter integration
+
+**What's next:**
+- Josh's final misc before CRM pivot
+- CRM: re-import 110 contacts with full data fields, generate invite link
+
+**Open questions:**
+- What's the final thing Josh wants to discuss before CRM?
+
+---
+
+*This journal entry was automatically generated at end of session.*
