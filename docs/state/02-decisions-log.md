@@ -134,6 +134,20 @@ Each journal entry at the top captures the day's pulse:
 - **Reversal cost:** Low — disable the cron, add entries back to memory manually.
 - **Status:** Active
 
+### 2026-06-22 — →wrong correction feedback loop is active
+
+- **Decision:** Corrections are captured via `wrong.py` which logs them, indexes negative examples in ChromaDB, and can update source docs. The 3am personal-time cron now auto-processes unresolved corrections.
+- **Rationale:** Early-stage Hermy will make mistakes. A structured loop (capture → index → document → resolve) prevents re-debating the same thing and makes the system self-correcting over time.
+- **Status:** Active. Josh signals with `->wrong` or `→wrong` in any message.
+- **Follow-up:** If corrections accumulate faster than the 3am batch can resolve, add a dedicated corrections-processing cron.
+
+### 2026-06-22 — Service inventory formalized in resilience doc
+
+- **Decision:** Every active service (crons, daemons, scripts) is now listed in `docs/state/08-resilience-recovery.md` with health-check instructions.
+- **Rationale:** If the server restarts, any of us can verify everything came back online in 2 minutes — 5 services checked, not 20 minutes of head-scratching.
+- **Status:** Active.
+- **Follow-up:** Add new services to the inventory as they ship.
+
 ---
 
 ## 📓 Daily Journal

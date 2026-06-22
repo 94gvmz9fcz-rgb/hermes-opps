@@ -6,6 +6,7 @@
 |---|---|---|
 | `v0.1-foundation` | GitHub + Telegram + OneDrive + OpenRouter + DeepSeek + Gemini + local llama.cpp + prompt injection guard | `git checkout v0.1-foundation` |
 | `v0.2-infra-stable` | + nightly backup + state export + resilience doc | `git checkout v0.2-infra-stable` |
+| `v0.3-force-multipliers` | + weekly fireside cron + →wrong feedback loop + instant indexer + `correction-feedback-loop` skill | `git checkout v0.3-force-multipliers` |
 
 Tags are pushed to `origin`. Recover with:
 
@@ -64,6 +65,18 @@ Or download from OneDrive if local backup is gone.
 | State docs lost | Restore from OneDrive state export | ~5 min |
 | Full server failure | New DO droplet → pull repo → restore backup tarball → restore state exports | ~30 min |
 | GitHub deleted | Tarball has full `.git` dir; `git init` and `git remote add origin <new>` | ~15 min |
+| Instant indexer daemon lost | `cd /opt/data/repo && source ~/.hermes/hybrid-env/bin/activate && nohup python3 scripts/hermy-instant-indexer.py --watch >> /opt/data/logs/instant-indexer.log 2>&1 &` — or let the watchdog cron restart it within 5 min | ~1 min |
+
+## Service Inventory
+
+| Service | Type | Managed by | Health check |
+|---|---|---|---|
+| Health monitor | Cron (every 6h) | `health-monitor` cron job | Reports to chat |
+| Instant indexer | Daemon (30s poll) | `keep-instant-indexer-alive.sh` watchdog (every 5 min) | `ps aux | grep hermy-instant-indexer` |
+| →wrong feedback | CLI script + 3am cron | `wrong.py` + herms-personal-time | `wrong.py list --unresolved` |
+| Weekly Fireside | Cron (Fri 9am UTC) | `weekly-fireside` cron job | Delivers to chat each Friday |
+| Token budget | Cron (daily 9am UTC) | `daily-token-budget` cron job | Reports to chat |
+| Memory compression | Cron (daily 02:45 UTC) | `daily-memory-compression` cron job | Runs silently |
 
 ## Security Notes
 
