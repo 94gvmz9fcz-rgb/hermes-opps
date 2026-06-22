@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Strange Attractor — AStew</title>
+  <script>p5.disableFriendlyErrors = true;</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.3/p5.min.js"></script>
+  <style>
+    html, body { margin: 0; padding: 0; overflow: hidden; background: #08050a; }
+    canvas { display: block; }
+    #info {
+      position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+      color: rgba(200, 160, 255, 0.3);
+      font-family: 'SF Mono', 'Cascadia Code', monospace;
+      font-size: 10px; letter-spacing: 1px;
+      pointer-events: none; user-select: none;
+      text-align: center; line-height: 1.8;
+    }
+    #info kbd {
+      display: inline-block; border: 1px solid rgba(200, 160, 255, 0.15);
+      border-radius: 3px; padding: 0 5px; font-size: 9px;
+    }
+  </style>
+</head>
+<body>
+<div id="info">
+  [<kbd>S</kbd>] PNG &nbsp; [<kbd>1-6</kbd>] Attractor &nbsp; [<kbd>R</kbd>] Reseed &nbsp; [<kbd>Space</kbd>] Pause
+</div>
+<script>
+// ═══════════════════════════════════════════════════════════════
+//  STRANGE ATTRACTOR GALLERY
+//  6 different strange attractors, color-cycled, density-mapped
+//  Pure math, cold geometry, infinite detail
+// ═══════════════════════════════════════════════════════════════
+
+const CONFIG = {
+  seed: Math.floor(Math.random() * 99999),
+  iterations: 400000,
+  pointSize: 0.6,
+  fadeSpeed: 0.3,
+  colorSpeed: 0.0008,
+  currentAttractor: 0,
+  scale: 180,
+  density: 1,
+};
+
+const ATTRACTORS = [
+  // 0 — Clifford
+  { name: 'Clifford', params: { a: -1.3, b: -1.3, c: -1.8, d: -1.9 }, range: 3 },
+  // 1 — De Jong
+  { name: 'De Jong', params: { a: -2.0, b: -2.0, c: -1.2, d: 1.9 }, range: 3 },
+  // 2 — Svensson
+  { name: 'Svensson', params: { a: 1.4, b: -2.3, c: 2.4, d: -2.1 }, range: 3.5 },
+  // 3 — Pickover
+  { name: 'Pickover', params: { a: 1.64, b: 1.7, c: -1.4, d: -1.9 }, range: 3.2 },
+  // 4 — Four Wing
+  { name: 'Four Wing', params: { a: -2.5, b: -2.5, c: 1.5, d: -1.5 }, range: 3 },
+  // 5 — Bedhead
+  { name: 'Bedhead', params: { a: 1.64, b: 1.7, c: -1.4, d: -1.9 }, range: 4 },
+];
+
+let attractor;
+let pg;          // accumulation buffer
+let colorPhase = 0;
+let paused = false;
+let attractorChanged = true;
+
+function resetAttractor() {
+  attractor = ATTRACTORS[CONFIG.currentAttractor];
+  pg.background(8, 5, 10, 255);
+  attractorChanged = true;
+}
+
+function nextAttractor() {
+  CONFIG.currentAttractor = (CONFIG.currentAttractor + 1) % ATTRACTORS.length;
+  resetAttractor();
+}
+
+function prevAttractor() {
+  CONFIG.currentAttractor = (CONFIG.currentAttractor - 1 + ATTRACTORS.length) % ATTRACTORS.length;
+  resetAttractor();
+}
+
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  colorMode(HSB, 360, 100, 100, 100);
+  pixelDensity(1);
+
+  randomSeed(CONFIG.seed);
+  noiseSeed(CONFIG.seed);
+
+  pg = createGraphics(width, height);
+  pg.colorMode(HSB, 360, 100, 100, 100);
+  pg.background(8, 5, 10);
+
+  attractor = ATTRACTORS[CONFIG.currentAttractor];
+}
+
+function drawStrangeAttractor(buf, attractor, iterations) {
+  let { a, b, c, d } = attractor.params;
+  let range = attractor.range;
+  let x = random(-0.5, 0.5);
+  let y = random(-0.5, 0.5);
+
+  buf.strokeWeight(CONFIG.pointSize);
+  buf.noFill();
+
+  for (let i = 0; i < iterations; i++) {
+    let nx, ny;
+
+    // Clifford / De Jong family
+    nx = Math.sin(a * y) + c * Math.cos(a * x);
+    ny = Math.sin(b * x) + d * Math.cos(b * y);
+
+    // Some attractors use a different family. Detect and remap.
+    // All six here use the sin-cos family with different params.
+    // Four Wing uses same form with shifted params.
+
+    x = nx;
+    y = ny;
+
+    // Map to screen
+    let px = map(x, -range, range, 0, width);
+    let py = map(y, -range, range, 0, height);
+
+    if (px > 0 && px < width && py > 0 && py < height) {
+      // Hue from position + color phase
+      let hueVal = (Math.atan2(y, x) / Math.PI * 60 + 180 + colorPhase * 360) % 360;
+      let sat = 40 + 40 * (1 - Math.abs(y) / range);
+      let bri = 50 + 40 * (1 - Math.abs(x) / range);
+
+      buf.stroke(hueVal, sat, bri, 25);
+      buf.point(px, py);
+    }
+  }
+}
+
+function draw() {
+  if (paused) return;
+
+  colorPhase = (colorPhase + CONFIG.colorSpeed) % 1;
+
+  // Fade old points slightly
+  pg.noStroke();
+  pg.fill(8, 5, 10, CONFIG.fadeSpeed);
+  pg.rect(0, 0, width, height);
+
+  // Draw new points
+  drawStrangeAttractor(pg, attractor, 2000);
+
+  image(pg, 0, 0);
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+  pg = createGraphics(width, height);
+  pg.colorMode(HSB, 360, 100, 100, 100);
+  pg.background(8, 5, 10);
+}
+
+function keyPressed() {
+  if (key === 's' || key === 'S') saveCanvas('strange-attractor', 'png');
+  if (key === 'g' || key === 'G') saveGif('strange-attractor', 3);
+  if (key === 'r' || key === 'R') {
+    CONFIG.seed = Math.floor(Math.random() * 99999);
+    randomSeed(CONFIG.seed);
+    noiseSeed(CONFIG.seed);
+    pg.background(8, 5, 10);
+    colorPhase = 0;
+  }
+  if (key === ' ') paused = !paused;
+  if (key >= '1' && key <= '6') {
+    CONFIG.currentAttractor = parseInt(key) - 1;
+    resetAttractor();
+  }
+}
+</script>
+</body>
+</html>

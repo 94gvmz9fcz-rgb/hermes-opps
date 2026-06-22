@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bioluminescent Drift</title>
+  <script>p5.disableFriendlyErrors = true;</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.3/p5.min.js"></script>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: #05080f;
+    }
+    canvas { display: block; }
+    #info {
+      position: fixed;
+      bottom: 20px;
+      right: 24px;
+      color: rgba(100, 180, 255, 0.25);
+      font-family: 'SF Mono', 'Cascadia Code', monospace;
+      font-size: 11px;
+      letter-spacing: 1px;
+      pointer-events: none;
+      user-select: none;
+      text-align: right;
+      line-height: 1.6;
+    }
+    #info kbd {
+      display: inline-block;
+      border: 1px solid rgba(100, 180, 255, 0.15);
+      border-radius: 3px;
+      padding: 0 5px;
+      font-size: 10px;
+    }
+  </style>
+</head>
+<body>
+<div id="info">
+  [<kbd>S</kbd>] PNG &nbsp; [<kbd>G</kbd>] GIF &nbsp; [<kbd>R</kbd>] Reseed &nbsp; [<kbd>Space</kbd>] Pause<br>
+  <span id="fps-counter"></span>
+</div>
+<script>
+// ═══════════════════════════════════════════════════════════════
+//  BIOLUMINESCENT DRIFT
+//  A generative deep-ocean particle system
+//  Flow field + domain warping + bloom post-processing
+// ═══════════════════════════════════════════════════════════════
+
+const CONFIG = {
+  seed: Math.floor(Math.random() * 99999),
+  particleCount: 8000,
+  maxSpeed: 1.2,
+  flowScale: 0.003,
+  flowStrength: 0.6,
+  warpStrength: 0.7,
+  trailFade: 6,
+  bloomIntensity: 70,
+  bloomDownsample: 4,
+  bloomBlur: 6,
+  spawnRate: 8,       // particles per frame
+  colorShiftSpeed: 0.0004,
+};
+
+const PALETTES = [
+  // Deep ocean — teal to violet
+  { bg: [5, 8, 15], particles: [
+    { h: 190, s: 70, b: 90 },   // bright cyan
+    { h: 220, s: 60, b: 85 },   // electric blue
+    { h: 160, s: 50, b: 80 },   // sea green
+    { h: 270, s: 40, b: 70 },   // soft violet
+  ]},
+  // Abyssal vent — warm glow
+  { bg: [8, 5, 10], particles: [
+    { h: 30,  s: 80, b: 95 },   // warm amber
+    { h: 50,  s: 70, b: 90 },   // gold
+    { h: 10,  s: 60, b: 80 },   // coral
+    { h: 200, s: 40, b: 60 },   // distant blue
+  ]},
+  // Midnight surface — boreal
+  { bg: [3, 12, 20], particles: [
+    { h: 120, s: 60, b: 85 },   // phosphor green
+    { h: 140, s: 50, b: 75 },   // deep teal
+    { h: 180, s: 40, b: 90 },   // ice cyan
+    { h: 240, s: 30, b: 60 },   // twilight blue
+  ]},
+];
+
+// Global state
+let palette;
+let bgColor;
+let trailBuf, bloomBuf;
+let particles = [];
+let paused = false;
+let time = 0;
+let colorPhase = 0;
+let currentPaletteIdx = 0;
+let allParticleColors = [];
+
+// ── Flow Field ──
+class FlowField {
+  constructor(res) {
+    this.res = res;
+    this.cols = Math.ceil(windowWidth / res);
+    this.rows = Math.ceil(windowHeight / res);
+    this.field = new Array(this.cols * this.rows);
+  }
+
+  update(t) {
+    const sc = CONFIG.flowScale;
+    const ws = CONFIG.warpStrength;
+    for (let i = 0; i < this.cols; i++) {
+      for (let j = 0; j < this.rows; j++) {
+        let x = i * sc;
+        let y = j * sc;
+        // Domain warp for organic flow
+        let qx = fbm(x + 0.0, y + 0.0, 3);
+        let qy = fbm(x + 5.2, y + 1.3, 3);
+        let rx = fbm(x + ws * qx + 1.7, y + ws * qy + 9.2, 4);
+        let ry = fbm(x + ws * qx + 8.3, y + ws * qy + 2.8, 4);
+        let angle = fbm(x + ws * rx + t * 0.015, y + ws * ry + t * 0.012, 4) * Math.PI * 4;
+        this.field[i + j * this.cols] = angle;
+      }
+    }
+  }
+
+  lookup(x, y) {
+    let col = Math.floor(x / this.res);
+    let row = Math.floor(y / this.res);
+    col = Math.max(0, Math.min(this.cols - 1, col));
+    row = Math.max(0, Math.min(this.rows - 1, row));
+    let angle = this.field[col + row * this.cols];
+    return { x: Math.cos(angle), y: Math.sin(angle) };
+  }
+}
+
+let flowField;
+
+// ── Particle ──
+class DriftParticle {
+  constructor() {
+    this.pos = createVector(
+      random(width),
+      random(height)
+    );
+    this.vel = p5.Vector.random2D().mult(random(0.5, 1.5));
+    this.acc = createVector(0, 0);
+    this.prevPos = this.pos.copy();
+    this.size = random(1.2, 3.5);
+    this.pulseSpeed = random(0.02, 0.06);
+    this.pulseOffset = random(TWO_PI);
+    this.life = 1.0;
+    this.decay = random(0.0008, 0.002);
+    this.colorIdx = Math.floor(random(allParticleColors.length));
+    this.alpha = random(60, 180);
+  }
+
+  applyForce(f) {
+    this.acc.add(f);
+  }
+
+  update() {
+    this.prevPos.set(this.pos);
+    this.vel.add(this.acc);
+    this.vel.limit(CONFIG.maxSpeed);
+    this.pos.add(this.vel);
+    this.acc.mult(0);
+
+    // Wrap edges
+    if (this.pos.x < -5) this.pos.x = width + 5;
+    if (this.pos.x > width + 5) this.pos.x = -5;
+    if (this.pos.y < -5) this.pos.y = height + 5;
+    if (this.pos.y > height + 5) this.pos.y = -5;
+
+    // Don't draw wrap lines
+    let dx = this.pos.x - this.prevPos.x;
+    let dy = this.pos.y - this.prevPos.y;
+    if (Math.abs(dx) > width * 0.5 || Math.abs(dy) > height * 0.5) {
+      this.prevPos.set(this.pos);
+    }
+
+    this.life -= this.decay;
+  }
+
+  display(buf) {
+    let pulse = 0.6 + 0.4 * Math.sin(time * this.pulseSpeed + this.pulseOffset);
+    let c = allParticleColors[this.colorIdx];
+    let sz = this.size * (0.7 + 0.3 * pulse);
+    let a = this.alpha * this.life * pulse;
+
+    buf.stroke(c.r, c.g, c.b, a * 0.6);
+    buf.strokeWeight(sz * 0.5);
+    buf.line(this.prevPos.x, this.prevPos.y, this.pos.x, this.pos.y);
+  }
+
+  isDead() { return this.life <= 0; }
+}
+
+// ── Noise Helpers ──
+function fbm(x, y, octaves) {
+  let value = 0, amp = 1, freq = 1, sum = 0;
+  for (let i = 0; i < octaves; i++) {
+    value += noise(x * freq, y * freq) * amp;
+    sum += amp;
+    amp *= 0.5;
+    freq *= 2.0;
+  }
+  return value / sum;
+}
+
+function setPalette(idx) {
+  currentPaletteIdx = idx % PALETTES.length;
+  palette = PALETTES[currentPaletteIdx];
+  bgColor = palette.bg;
+  allParticleColors = palette.particles.map(p => {
+    let c = color(p.h, p.s, p.b);
+    return { r: red(c), g: green(c), b: blue(c) };
+  });
+}
+
+function shufflePalette() {
+  setPalette(currentPaletteIdx + 1);
+}
+
+function reseed() {
+  CONFIG.seed = Math.floor(Math.random() * 99999);
+  randomSeed(CONFIG.seed);
+  noiseSeed(CONFIG.seed);
+  particles = [];
+  time = 0;
+  setPalette(0);
+}
+
+// ── p5.js Lifecycle ──
+
+function preload() {
+  // Nothing to preload for now
+}
+
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  colorMode(HSB, 360, 100, 100, 100);
+  pixelDensity(1);
+
+  randomSeed(CONFIG.seed);
+  noiseSeed(CONFIG.seed);
+
+  setPalette(0);
+
+  trailBuf = createGraphics(width, height);
+  bloomBuf = createGraphics(
+    Math.ceil(width / CONFIG.bloomDownsample),
+    Math.ceil(height / CONFIG.bloomDownsample)
+  );
+
+  let res = 8;
+  flowField = new FlowField(res);
+
+  // Pre-seed particles for instant visual
+  for (let i = 0; i < CONFIG.particleCount * 0.6; i++) {
+    let p = new DriftParticle();
+    p.life = random(0.5, 1.0);
+    particles.push(p);
+  }
+}
+
+function draw() {
+  if (paused) return;
+
+  time++;
+  let t = time;
+
+  // Shift color palette slowly
+  colorPhase = (time * CONFIG.colorShiftSpeed) % 1;
+  if (colorPhase < 0.01 && t > 100) {
+    shufflePalette();
+  }
+
+  // Update flow field (every 3 frames for perf)
+  if (t % 3 === 0) {
+    flowField.update(t);
+  }
+
+  // Trail fade
+  trailBuf.noStroke();
+  trailBuf.fill(bgColor[0], bgColor[1], bgColor[2], CONFIG.trailFade);
+  trailBuf.rect(0, 0, width, height);
+
+  // Follow field + update particles
+  for (let p of particles) {
+    let force = flowField.lookup(p.pos.x, p.pos.y);
+    p.applyForce(createVector(force.x * CONFIG.flowStrength, force.y * CONFIG.flowStrength));
+    p.update();
+    p.display(trailBuf);
+  }
+
+  // Remove dead particles
+  particles = particles.filter(p => !p.isDead());
+
+  // Spawn new particles at rate
+  for (let i = 0; i < CONFIG.spawnRate; i++) {
+    if (particles.length < CONFIG.particleCount) {
+      // Spawn from edges, not uniformly
+      let edge = Math.floor(random(4));
+      let x, y;
+      if (edge === 0) { x = random(width); y = -10; }
+      else if (edge === 1) { x = width + 10; y = random(height); }
+      else if (edge === 2) { x = random(width); y = height + 10; }
+      else { x = -10; y = random(height); }
+      let p = new DriftParticle();
+      p.pos = createVector(x, y);
+      p.life = 1.0;
+      particles.push(p);
+    }
+  }
+
+  // ── Composite ──
+  // Layer 1: trail buffer
+  image(trailBuf, 0, 0);
+
+  // Layer 2: bloom (additive glow)
+  bloomBuf.clear();
+  bloomBuf.image(trailBuf, 0, 0, bloomBuf.width, bloomBuf.height);
+  bloomBuf.filter(BLUR, CONFIG.bloomBlur);
+
+  blendMode(ADD);
+  tint(255, CONFIG.bloomIntensity);
+  image(bloomBuf, 0, 0, width, height);
+  noTint();
+  blendMode(BLEND);
+
+  // FPS counter
+  document.getElementById('fps-counter').textContent =
+    `${Math.round(frameRate())} fps · ${particles.length} particles`;
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+  trailBuf = createGraphics(width, height);
+  bloomBuf = createGraphics(
+    Math.ceil(width / CONFIG.bloomDownsample),
+    Math.ceil(height / CONFIG.bloomDownsample)
+  );
+  flowField = new FlowField(8);
+}
+
+// ── Controls ──
+function keyPressed() {
+  if (key === 's' || key === 'S') {
+    saveCanvas('bioluminescent-drift', 'png');
+  }
+  if (key === 'g' || key === 'G') {
+    saveGif('bioluminescent-drift', 3);
+  }
+  if (key === 'r' || key === 'R') {
+    reseed();
+  }
+  if (key === ' ') {
+    paused = !paused;
+  }
+}
+</script>
+</body>
+</html>

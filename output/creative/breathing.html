@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Breathing — AStew</title>
+  <script>p5.disableFriendlyErrors = true;</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.3/p5.min.js"></script>
+  <style>
+    html, body { margin: 0; padding: 0; overflow: hidden; background: #0a0a0f; }
+    canvas { display: block; }
+    #info {
+      position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+      color: rgba(120, 180, 200, 0.25);
+      font-family: 'SF Mono', 'Cascadia Code', monospace;
+      font-size: 10px; letter-spacing: 1px;
+      pointer-events: none; user-select: none;
+      text-align: center; line-height: 1.8;
+    }
+    #info kbd {
+      display: inline-block; border: 1px solid rgba(120, 180, 200, 0.12);
+      border-radius: 3px; padding: 0 5px; font-size: 9px;
+    }
+  </style>
+</head>
+<body>
+<div id="info">
+  [<kbd>S</kbd>] PNG &nbsp; [<kbd>R</kbd>] Reseed &nbsp; [<kbd>Space</kbd>] Pause
+</div>
+<script>
+// ═══════════════════════════════════════════════════════════════
+//  BREATHING
+//  Kinetic typography meets generative particle field
+//  Words emerge from noise, drift like smoke, dissolve
+// ═══════════════════════════════════════════════════════════════
+
+const CONFIG = {
+  seed: Math.floor(Math.random() * 99999),
+  particleCount: 4000,
+  maxSpeed: 0.4,
+  flowScale: 0.004,
+  flowStrength: 0.3,
+  trailFade: 12,
+  textFadeDuration: 240,   // frames a text lives
+  textInterval: 480,       // frames between new text
+  fontSize: 120,
+};
+
+const WORDS = [
+  "Breathe", "Flow", "Drift", "Now", "Here",
+  "Still", "Rise", "Sink", "Tide", "Open",
+  "Light", "Depth", "Quiet", "Vast", "Slow",
+  "Horizon", "Anchor", "Current", "Echo",
+];
+
+let pg;            // main render buffer
+let particles = [];
+let textParticles = [];
+let currentText = '';
+let textAge = 999;     // force spawn on first frame
+let paused = false;
+let time = 0;
+
+// ── Flow Field ──
+class FlowField {
+  constructor(res) {
+    this.res = res;
+    this.cols = Math.ceil(windowWidth / res);
+    this.rows = Math.ceil(windowHeight / res);
+    this.field = new Array(this.cols * this.rows);
+  }
+
+  update(t) {
+    const sc = CONFIG.flowScale;
+    for (let i = 0; i < this.cols; i++) {
+      for (let j = 0; j < this.rows; j++) {
+        let x = i * sc;
+        let y = j * sc;
+        let angle = Math.sin(x * 2 + t * 0.008) * 0.5 +
+                    Math.cos(y * 2 + t * 0.006) * 0.5 +
+                    fbm(x + 10, y + 10, 3) * 0.5;
+        this.field[i + j * this.cols] = angle * PI;
+      }
+    }
+  }
+
+  lookup(x, y) {
+    let col = Math.floor(x / this.res);
+    let row = Math.floor(y / this.res);
+    col = Math.max(0, Math.min(this.cols - 1, col));
+    row = Math.max(0, Math.min(this.rows - 1, row));
+    let angle = this.field[col + row * this.cols];
+    return { x: Math.cos(angle), y: Math.sin(angle) };
+  }
+}
+
+let flowField;
+
+// ── Ambient Particle ──
+class AmbientParticle {
+  constructor() {
+    this.pos = createVector(random(width), random(height));
+    this.vel = createVector(0, 0);
+    this.acc = createVector(0, 0);
+    this.prevPos = this.pos.copy();
+    this.size = random(0.3, 1.2);
+    this.baseHue = random(190, 220);
+    this.alpha = random(10, 40);
+  }
+
+  applyForce(f) { this.acc.add(f); }
+
+  update() {
+    this.prevPos.set(this.pos);
+    this.vel.add(this.acc);
+    this.vel.limit(CONFIG.maxSpeed);
+    this.pos.add(this.vel);
+    this.acc.mult(0);
+    if (this.pos.x < -5) this.pos.x = width + 5;
+    if (this.pos.x > width + 5) this.pos.x = -5;
+    if (this.pos.y < -5) this.pos.y = height + 5;
+    if (this.pos.y > height + 5) this.pos.y = -5;
+    let dx = this.pos.x - this.prevPos.x;
+    let dy = this.pos.y - this.prevPos.y;
+    if (Math.abs(dx) > width * 0.5 || Math.abs(dy) > height * 0.5)
+      this.prevPos.set(this.pos);
+  }
+
+  display(buf) {
+    let pulse = 0.4 + 0.6 * Math.sin(time * 0.02 + this.pos.x * 0.01 + this.pos.y * 0.01);
+    let hue = this.baseHue + 30 * Math.sin(time * 0.01 + this.pos.x * 0.005);
+    buf.stroke(hue, 40, 80, this.alpha * pulse);
+    buf.strokeWeight(this.size);
+    buf.line(this.prevPos.x, this.prevPos.y, this.pos.x, this.pos.y);
+  }
+}
+
+// ── Typography Particle ──
+class TextParticle {
+  constructor(x, y, targetX, targetY, hue) {
+    this.pos = createVector(x, y);
+    this.target = createVector(targetX, targetY);
+    this.vel = createVector(0, 0);
+    this.acc = createVector(0, 0);
+    this.size = random(1.5, 4);
+    this.hue = hue + random(-15, 15);
+    this.sat = 60 + random(-10, 10);
+    this.bri = 90;
+    this.age = 0;
+    this.lifespan = CONFIG.textFadeDuration + random(-30, 30);
+    this.arrived = false;
+  }
+
+  applyForce(f) { this.acc.add(f); }
+
+  update() {
+    this.age++;
+
+    // Seek target
+    let desired = p5.Vector.sub(this.target, this.pos);
+    let d = desired.mag();
+    if (d < 2) {
+      this.arrived = true;
+      this.vel.mult(0.96);
+    } else {
+      desired.setMag(Math.min(d * 0.05, 3));
+      this.acc.add(desired);
+    }
+
+    // Add gentle flow drift
+    let flow = flowField.lookup(this.pos.x, this.pos.y);
+    this.acc.add(createVector(flow.x * 0.1, flow.y * 0.1));
+
+    this.vel.add(this.acc);
+    this.vel.limit(2);
+    this.pos.add(this.vel);
+    this.acc.mult(0);
+  }
+
+  display(buf) {
+    let lifeRatio = 1 - this.age / this.lifespan;
+    if (lifeRatio <= 0) return;
+    let fadeIn = Math.min(1, this.age / 20);
+    let alpha = lifeRatio * fadeIn * 180;
+    buf.fill(this.hue, this.sat, this.bri, alpha);
+    buf.noStroke();
+    buf.circle(this.pos.x, this.pos.y, this.size * lifeRatio);
+  }
+
+  isDead() { return this.age > this.lifespan; }
+}
+
+// ── Noise ──
+function fbm(x, y, octaves) {
+  let value = 0, amp = 1, freq = 1, sum = 0;
+  for (let i = 0; i < octaves; i++) {
+    value += noise(x * freq, y * freq) * amp;
+    sum += amp;
+    amp *= 0.5;
+    freq *= 2.0;
+  }
+  return value / sum;
+}
+
+// ── Spawn Text ──
+function spawnText(word) {
+  textParticles = textParticles.filter(p => !p.isDead());
+
+  pg.textFont('Georgia, "Times New Roman", serif');
+  pg.textSize(CONFIG.fontSize);
+  pg.textAlign(CENTER, CENTER);
+  pg.fill(255);
+  pg.noStroke();
+
+  // Get text shape by sampling
+  let tx = width / 2;
+  let ty = height / 2;
+  let tw = pg.textWidth(word);
+  let ts = CONFIG.fontSize;
+  let samples = [];
+
+  // Sample the text shape
+  let density = 2;
+  let hueBase = random(180, 240);
+
+  for (let sx = Math.floor(tx - tw / 2); sx < Math.ceil(tx + tw / 2); sx += density) {
+    for (let sy = Math.floor(ty - ts / 2); sy < Math.ceil(ty + ts / 2); sy += density) {
+      // Simulate text hit-test using pixel sampling
+      let charX = map(sx, tx - tw/2, tx + tw/2, 0, tw);
+      let charIdx = Math.floor(map(charX, 0, tw, 0, word.length));
+      charIdx = Math.max(0, Math.min(word.length - 1, charIdx));
+      let char = word[charIdx];
+
+      // Height check: is this pixel near the vertical center of the char?
+      let normalizedY = (sy - (ty - ts/2)) / ts;
+      if (normalizedY > 0.15 && normalizedY < 0.85) {
+        // Each character spans roughly equal horizontal width
+        let charStart = map(charIdx, 0, word.length, -tw/2, tw/2);
+        let charEnd = map(charIdx + 1, 0, word.length, -tw/2, tw/2);
+        let relX = sx - tx;
+        if (relX > charStart && relX < charEnd) {
+          samples.push({ x: sx, y: sy });
+        }
+      }
+    }
+  }
+
+  // If we didn't get enough samples, use a fallback grid
+  if (samples.length < 50) {
+    let spacing = 4;
+    for (let sx = Math.floor(tx - tw/2) - 10; sx < Math.ceil(tx + tw/2) + 10; sx += spacing) {
+      for (let sy = Math.floor(ty - ts/3); sy < Math.ceil(ty + ts/3); sy += spacing) {
+        samples.push({ x: sx, y: sy });
+      }
+    }
+  }
+
+  // Create particles from samples
+  for (let s of samples) {
+    let startX = random(width);
+    let startY = random(height);
+    let hueVal = hueBase + (s.y - (ty - ts/2)) / ts * 40 + random(-10, 10);
+    textParticles.push(new TextParticle(startX, startY, s.x, s.y, hueVal));
+  }
+}
+
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  colorMode(HSB, 360, 100, 100, 100);
+  pixelDensity(1);
+
+  randomSeed(CONFIG.seed);
+  noiseSeed(CONFIG.seed);
+
+  pg = createGraphics(width, height);
+  pg.colorMode(HSB, 360, 100, 100, 100);
+
+  flowField = new FlowField(10);
+
+  // Seed ambient particles
+  for (let i = 0; i < CONFIG.particleCount; i++) {
+    particles.push(new AmbientParticle());
+  }
+}
+
+function draw() {
+  if (paused) return;
+  time = frameCount;
+
+  // Update flow field
+  if (time % 4 === 0) flowField.update(time);
+
+  // Fade canvas
+  pg.noStroke();
+  pg.fill(10, 10, 15, CONFIG.trailFade);
+  pg.rect(0, 0, width, height);
+
+  // Update ambient particles
+  for (let p of particles) {
+    let force = flowField.lookup(p.pos.x, p.pos.y);
+    p.applyForce(createVector(force.x * 0.2, force.y * 0.2));
+    p.update();
+    p.display(pg);
+  }
+
+  // Spawn new text periodically
+  textAge++;
+  if (textAge > CONFIG.textInterval) {
+    let word = random(WORDS);
+    spawnText(word);
+    textAge = 0;
+  }
+
+  // Update and display text particles
+  textParticles = textParticles.filter(p => !p.isDead());
+  for (let p of textParticles) {
+    p.update();
+    p.display(pg);
+  }
+
+  image(pg, 0, 0);
+
+  // FPS
+  document.getElementById('fps-counter').textContent =
+    `${Math.round(frameRate())} fps · ${particles.length} ambient · ${textParticles.length} text`;
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+  pg = createGraphics(width, height);
+  pg.colorMode(HSB, 360, 100, 100, 100);
+  flowField = new FlowField(10);
+}
+
+function keyPressed() {
+  if (key === 's' || key === 'S') saveCanvas('breathing', 'png');
+  if (key === 'g' || key === 'G') saveGif('breathing', 3);
+  if (key === 'r' || key === 'R') {
+    CONFIG.seed = Math.floor(Math.random() * 99999);
+    randomSeed(CONFIG.seed);
+    noiseSeed(CONFIG.seed);
+    pg.background(10, 10, 15);
+    textParticles = [];
+    textAge = 999;
+  }
+  if (key === ' ') paused = !paused;
+}
+</script>
+</body>
+</html>
