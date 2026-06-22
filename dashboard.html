@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Hermes Dashboard</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #080812;
+      color: #c8d0e0;
+      font-family: -apple-system, 'SF Mono', 'Cascadia Code', monospace;
+      font-size: 14px;
+      padding: 16px;
+      min-height: 100vh;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(100, 140, 200, 0.15);
+    }
+    .header h1 {
+      font-size: 16px;
+      font-weight: 400;
+      letter-spacing: 3px;
+      color: rgba(180, 200, 240, 0.6);
+      text-transform: uppercase;
+    }
+    .header .timestamp {
+      font-size: 11px;
+      color: rgba(180, 200, 240, 0.25);
+    }
+    .section {
+      margin-bottom: 20px;
+    }
+    .section-title {
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(180, 200, 240, 0.3);
+      margin-bottom: 8px;
+    }
+    .card {
+      background: linear-gradient(135deg, rgba(20, 25, 50, 0.6), rgba(10, 12, 25, 0.8));
+      border: 1px solid rgba(100, 140, 200, 0.12);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 8px;
+    }
+    .card-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+    }
+    .card-row + .card-row {
+      border-top: 1px solid rgba(100, 140, 200, 0.06);
+    }
+    .label {
+      color: rgba(180, 200, 240, 0.5);
+      font-size: 12px;
+    }
+    .value {
+      color: rgba(180, 200, 240, 0.85);
+      font-size: 12px;
+      text-align: right;
+    }
+    .value.good { color: #4ade80; }
+    .value.warn { color: #fbbf24; }
+    .value.bad  { color: #f87171; }
+    .status-dot {
+      display: inline-block;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      margin-right: 6px;
+    }
+    .status-dot.green { background: #4ade80; }
+    .status-dot.yellow { background: #fbbf24; }
+    .status-dot.red { background: #f87171; }
+    .crm-entry {
+      padding: 6px 0;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    .crm-entry + .crm-entry {
+      border-top: 1px solid rgba(100, 140, 200, 0.06);
+    }
+    .crm-entry .name { color: rgba(180, 200, 240, 0.8); }
+    .crm-entry .detail { color: rgba(180, 200, 240, 0.35); font-size: 11px; }
+    .pending-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 6px 0;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+    .pending-item + .pending-item { border-top: 1px solid rgba(100, 140, 200, 0.06); }
+    .pending-item .icon { color: rgba(180, 200, 240, 0.25); flex-shrink: 0; }
+    .pending-item .text { color: rgba(180, 200, 240, 0.7); }
+    .pending-item .text .highlight { color: #60a5fa; }
+    a { color: #60a5fa; text-decoration: none; }
+    .footer {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 10px;
+      color: rgba(180, 200, 240, 0.15);
+      letter-spacing: 2px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Hermes</h1>
+  <div class="timestamp" id="timestamp">JUST_NOW</div>
+</div>
+
+<div class="section">
+  <div class="section-title">System Health</div>
+  <div class="card" id="system-health">
+    <div class="card-row">
+      <span class="label">Status</span>
+      <span class="value good"><span class="status-dot green"></span>All systems nominal</span>
+    </div>
+    <div class="card-row">
+      <span class="label">Memory</span>
+      <span class="value" id="memory-value">—</span>
+    </div>
+    <div class="card-row">
+      <span class="label">Disk</span>
+      <span class="value good" id="disk-value">—</span>
+    </div>
+    <div class="card-row">
+      <span class="label">Uptime</span>
+      <span class="value" id="uptime-value">—</span>
+    </div>
+    <div class="card-row">
+      <span class="label">Crons</span>
+      <span class="value" id="cron-value">—</span>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">CRM Summary</div>
+  <div class="card" id="crm-summary">
+    <div class="card-row">
+      <span class="label">Total Contacts</span>
+      <span class="value" id="crm-total">—</span>
+    </div>
+    <div class="card-row">
+      <span class="label">Recent Additions</span>
+      <span class="value" id="crm-recent">—</span>
+    </div>
+    <div class="card-row">
+      <span class="label">Needs Attention</span>
+      <span class="value" id="crm-attention">—</span>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Recent Activity</div>
+  <div class="card" id="recent-activity">
+    <div id="activity-list">
+      <div class="pending-item">
+        <span class="icon">●</span>
+        <span class="text">No recent activity data. Cron update pending.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Pending Items</div>
+  <div class="card" id="pending-items">
+    <div class="pending-item">
+      <span class="icon">◆</span>
+      <span class="text">Set up <span class="highlight">email scanner</span> — need app password from JStew</span>
+    </div>
+    <div class="pending-item">
+      <span class="icon">◆</span>
+      <span class="text"><span class="highlight">Webhook inbox</span> — decide: serverless function vs cron-polled endpoint</span>
+    </div>
+    <div class="pending-item">
+      <span class="icon">◇</span>
+      <span class="text">ChatGPT history import — deferred until CRM next phase</span>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Creative Gallery</div>
+  <div class="card">
+    <div class="card-row">
+      <span class="label">🌊 Bioluminescent Drift</span>
+      <a href="https://94gvmz9fcz-rgb.github.io/hermes-opps/bioluminescent-drift.html" class="value">Open</a>
+    </div>
+    <div class="card-row">
+      <span class="label">🌀 Strange Attractor</span>
+      <a href="https://94gvmz9fcz-rgb.github.io/hermes-opps/strange-attractor.html" class="value">Open</a>
+    </div>
+    <div class="card-row">
+      <span class="label">💭 Breathing</span>
+      <a href="https://94gvmz9fcz-rgb.github.io/hermes-opps/breathing.html" class="value">Open</a>
+    </div>
+    <div class="card-row">
+      <span class="label">📋 Gallery Index</span>
+      <a href="https://94gvmz9fcz-rgb.github.io/hermes-opps/" class="value">Open</a>
+    </div>
+  </div>
+</div>
+
+<div class="footer">AStew · Hermes Agent · Nous Research</div>
+
+<script>
+  // Set timestamp
+  const now = new Date();
+  document.getElementById('timestamp').textContent =
+    now.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+  // Fetch live data from a JSON endpoint or use static fallback
+  async function loadDashboard() {
+    try {
+      const resp = await fetch('dashboard-data.json');
+      if (!resp.ok) throw new Error('Not found');
+      const data = await resp.json();
+      // This would be populated by the cron generator
+      if (data.memory) document.getElementById('memory-value').textContent = data.memory;
+      if (data.disk) document.getElementById('disk-value').textContent = data.disk;
+      if (data.uptime) document.getElementById('uptime-value').textContent = data.uptime;
+      if (data.crons) document.getElementById('cron-value').textContent = data.crons;
+      if (data.crmTotal) document.getElementById('crm-total').textContent = data.crmTotal;
+      if (data.crmRecent) document.getElementById('crm-recent').textContent = data.crmRecent;
+    } catch (e) {
+      // Static fallback — cron hasn't run yet
+    }
+  }
+  loadDashboard();
+</script>
+
+</body>
+</html>

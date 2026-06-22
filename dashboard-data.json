@@ -1,0 +1,11 @@
+{
+  "generated_at": "2026-06-22T18:44:42.875397+00:00",
+  "health": "good",
+  "memory": "2104M / 3915M (54%)",
+  "disk": "27G / 115G (23%)",
+  "uptime": "4d 15h",
+  "crons": "Unknown",
+  "crmTotal": "70+",
+  "crmRecent": "23 biz cards + 47 VCF",
+  "crmAttention": "Check phone fields"
+}
