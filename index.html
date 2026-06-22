@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AStew Generative Studio</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #080812;
+      color: #c8d0e0;
+      font-family: 'SF Mono', 'Cascadia Code', 'Courier New', monospace;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 300;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: rgba(180, 200, 240, 0.5);
+      margin-bottom: 0.5rem;
+    }
+    .subtitle {
+      font-size: 0.75rem;
+      color: rgba(180, 200, 240, 0.25);
+      letter-spacing: 3px;
+      margin-bottom: 3rem;
+    }
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      width: 100%;
+      max-width: 1100px;
+    }
+    .card {
+      background: linear-gradient(135deg, rgba(20, 25, 50, 0.8), rgba(10, 12, 25, 0.9));
+      border: 1px solid rgba(100, 140, 200, 0.15);
+      border-radius: 12px;
+      padding: 2rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    .card:hover {
+      border-color: rgba(100, 180, 255, 0.4);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 32px rgba(50, 100, 200, 0.15);
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: radial-gradient(ellipse at 50% 0%, rgba(80, 140, 255, 0.05), transparent 70%);
+      pointer-events: none;
+    }
+    .card-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    .card h2 {
+      font-size: 1.1rem;
+      font-weight: 400;
+      letter-spacing: 2px;
+      color: rgba(180, 200, 240, 0.8);
+      margin-bottom: 0.3rem;
+    }
+    .card .desc {
+      font-size: 0.8rem;
+      color: rgba(180, 200, 240, 0.4);
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+    .card .meta {
+      font-size: 0.7rem;
+      color: rgba(180, 200, 240, 0.2);
+      letter-spacing: 1px;
+    }
+    .card .controls {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(100, 140, 200, 0.1);
+      font-size: 0.7rem;
+      color: rgba(180, 200, 240, 0.35);
+      line-height: 1.8;
+    }
+    .card .controls kbd {
+      display: inline-block;
+      background: rgba(100, 140, 200, 0.1);
+      border: 1px solid rgba(100, 140, 200, 0.2);
+      border-radius: 3px;
+      padding: 0 5px;
+      font-family: inherit;
+      font-size: 0.65rem;
+    }
+    a.card-link {
+      text-decoration: none;
+      color: inherit;
+    }
+    footer {
+      margin-top: 3rem;
+      font-size: 0.65rem;
+      color: rgba(180, 200, 240, 0.15);
+      letter-spacing: 2px;
+    }
+  </style>
+</head>
+<body>
+  <h1>AStew Generative Studio</h1>
+  <div class="subtitle">Zero GPU · Zero Cost · Infinite Range</div>
+
+  <div class="gallery">
+
+    <a href="bioluminescent-drift.html" class="card-link">
+      <div class="card">
+        <div class="card-icon">🌊</div>
+        <h2>Bioluminescent Drift</h2>
+        <div class="desc">
+          8,000 particles drifting through a domain-warped flow field.
+          Bloom post-processing. Three cycling color worlds: deep ocean, abyssal vent, midnight surface.
+        </div>
+        <div class="meta">Particles · Flow Field · Bloom · 3 Palettes</div>
+        <div class="controls">
+          <kbd>S</kbd> PNG · <kbd>G</kbd> GIF · <kbd>R</kbd> Reseed · <kbd>Space</kbd> Pause
+        </div>
+      </div>
+    </a>
+
+    <a href="strange-attractor.html" class="card-link">
+      <div class="card">
+        <div class="card-icon">🌀</div>
+        <h2>Strange Attractor Gallery</h2>
+        <div class="desc">
+          6 different strange attractors (Clifford, De Jong, Svensson, Pickover, Four Wing, Bedhead).
+          Color-cycled, density-mapped, accumulating over time.
+        </div>
+        <div class="meta">Math · Geometry · 6 Modes · Infinite Detail</div>
+        <div class="controls">
+          <kbd>S</kbd> PNG · <kbd>1-6</kbd> Attractor · <kbd>R</kbd> Reseed · <kbd>Space</kbd> Pause
+        </div>
+      </div>
+    </a>
+
+    <a href="breathing.html" class="card-link">
+      <div class="card">
+        <div class="card-icon">💭</div>
+        <h2>Breathing</h2>
+        <div class="desc">
+          Kinetic typography meets generative particle field.
+          Words emerge from noise, assemble from scattered particles, drift like smoke, and dissolve.
+        </div>
+        <div class="meta">Typography · Particles · Flow Field · Meditative</div>
+        <div class="controls">
+          <kbd>S</kbd> PNG · <kbd>G</kbd> GIF · <kbd>R</kbd> Reseed · <kbd>Space</kbd> Pause
+        </div>
+      </div>
+    </a>
+
+  </div>
+
+  <footer>AStew · Hermes Agent · Nous Research · 2026</footer>
+</body>
+</html>
