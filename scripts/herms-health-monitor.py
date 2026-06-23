@@ -108,6 +108,22 @@ def check_memory():
         pass
     return {"status": "unknown"}
 
+def check_airtable_token():
+    """Check Airtable token health by calling the health script."""
+    import subprocess
+    try:
+        r = subprocess.run(
+            ["python3", "/opt/data/repo/scripts/airtable-token-health.py"],
+            capture_output=True, text=True, timeout=15
+        )
+        if r.returncode == 0:
+            return {"status": "ok"}
+        else:
+            return {"status": "error", "message": r.stderr.strip() or r.stdout.strip()}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
+
 def run():
     results = {
         "timestamp": datetime.now(timezone.utc).isoformat(),
@@ -115,6 +131,7 @@ def run():
         "disk": check_disk(),
         "backup": check_backup(),
         "memory": check_memory(),
+        "airtable_token": check_airtable_token(),
     }
     
     # Determine overall health
@@ -136,7 +153,11 @@ def run():
     
     if results["memory"].get("used_pct", 0) > 90:
         issues.append(f"System memory at {results['memory']['used_pct']}%")
-    
+
+    if results.get("airtable_token", {}).get("status") == "error":
+        msg = results["airtable_token"].get("message", "unknown")
+        issues.append(f"Airtable token issue: {msg}")
+
     results["issues"] = issues
     results["healthy"] = len(issues) == 0
     
