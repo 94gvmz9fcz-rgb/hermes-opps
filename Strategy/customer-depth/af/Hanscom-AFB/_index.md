@@ -31,9 +31,50 @@ Your exposure came through filtering on **JBLM** (Joint Base Lewis-McChord) for 
 >
 > **Renewal runs through end of CY2026.**
 
-### Key Takeaways
+---
 
-- **HNI entry point established** — even though this was just the Dell storage slice, it's a beachhead
-- **Proof of concept** — moving a requirement from 2GIT to SEWP when you're not a prime is hard; you made it happen
-- **Relationships to maintain:** Farzana Tucker, BJ Maumayhew
-- **Larger play** — the full HNI network is even bigger than this piece; Dell storage is a fraction
+## The Bigger Picture
+
+The Dell storage piece is just **one slice** of the full HNI network. The rest includes:
+
+- Hardware extensions
+- Hardware expansions
+- Hardware refreshes
+- Net new buildings
+- Everything else on the network outside Dell
+
+The opportunity to get **deeply ingrained** is essentially endless. Even at just a renewal standpoint, if executed properly:
+
+> **This could be an extremely high-value, pipeline-making, number-making opportunity if secured.**
+
+---
+
+## Path Forward (Two Approaches)
+
+### Upcoming Renewal: End of December 2026
+
+The current Dell storage renewal runs through end of CY2026 — the next window opens soon.
+
+### Path 1: Passive Monitoring
+
+- Monitor RFQ vehicles for anything hitting the HNI network
+- Watch **SAM.gov** and other major install / prime-subtype response vehicles
+- Ensure visibility on everything coming out for that network
+
+### Path 2: Direct Engagement (Recommended)
+
+| Step | Detail |
+|---|---|
+| **Target** | **HNI Contracting Officer (KO)** — "KO" because "CO" was already taken |
+| **Name** | **Rihanna** (last name TBD) |
+| **How to find her** | **2GIT feed** or **Govly** (G-O-V-L-Y) — email and phone within minutes |
+| **Your pitch** | "I was the brains behind the vision that was sold to you. I'm now at **[new company]** . I'd love to talk to your team about the upcoming renewal, and at this new organization, I can support it on the **contract vehicle the Air Force prefers**." |
+
+### Why This Works
+
+- You're not cold-calling — she already knows the vision
+- You're not asking her to move off 2GIT again — you're telling her you can serve her **on the vehicle she prefers**
+- The KO knows your value (she moved the requirement once already)
+- This is a **warm handoff of the same trusted approach** under a new badge
+
+> ⭐ **Path 2 is the higher-leverage move by a mile.** Finding Rihanna via Govly and making that call should be near the top of the new-VAR day-1 list — alongside Jacob/Ray at NGC.
