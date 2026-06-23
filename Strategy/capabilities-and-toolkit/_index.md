@@ -73,3 +73,30 @@ This is the process to bring to Chris at Dell day 1:
 5. **Bring to Dell Army team** → already proved within week 1 at CyKor
 
 > **Key point:** The value isn't the specific week-1 win. It's the **ability to call Chris day 1 and rebuild the same proven system.** The system works. It just needs a new badge underneath it.
+
+---
+
+## Customer / Industry Days Strategy (Q1 Target)
+
+### The Approach
+
+Small, intimate, targeted events — **not** massive blowouts like AFCEA West or other classic shows.
+
+| Advantage | Detail |
+|---|---|
+| **Scale** | Much smaller: focused, cheap to execute |
+| **Exhibitor model** | Must pay to be an exhibitor — can do **alone** or via **joint sponsorship** splitting cost with a major OEM partner |
+| **OEM partner candidate** | A partner with **MDTF funds available** (e.g., Dell) |
+| **Timeline** | Not day-1, but **Q1 minimum** |
+
+### The Campaign (Proven Model)
+
+A similar campaign was in place at CyKor — the specific relationships there may not transfer, but **the idea, process, and thought are easy to repeat** under a new badge.
+
+### Why It Works
+
+- Smaller events = **less noise, more face time** with decision-makers
+- Joint sponsorship = **halved cost, doubled credibility**
+- OEM with MDTF funds = **budget already exists**, just needs the right opportunity to attach to
+- Q1 timing = **early enough for the fiscal year, late enough to be established**
+

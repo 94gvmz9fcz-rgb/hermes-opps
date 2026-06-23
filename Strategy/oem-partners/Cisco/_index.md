@@ -1,5 +1,9 @@
 # Cisco — OEM Partner
 
-> Placeholder — Gabe Badai relationship documented under [Kratos FSI bucket](../people-of-interest/fsi/Kratos/_index.md).
+Core Cisco POI documented under [FSI bucket → Cisco](../people-of-interest/fsi/Cisco/_index.md):
 
-Cisco-specific OEM depth to follow.
+- **Shiva** (last name TBD, starts w/ A) — AM covering USARPAC, IndoPAC, Space Force
+- **Alexa Wright** — Space Force counterpart
+
+Cisco-specific OEM depth (pricing, registration, channel programs) to follow.
+
