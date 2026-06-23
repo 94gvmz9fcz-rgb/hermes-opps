@@ -8,4 +8,4 @@ Bucket for opportunities, stories, and relationship origins that don't fit neatl
 |---|---|---|
 | **[JBLM MDTF / Pure Storage](./jblm-mdtf/_index.md)** | Customer depth + OEM | ✅ Active — TechNet PNW origin, MDTF command, Pure co-campaign |
 | **[Brendan Connors Origin](./brendan-connors-origin/_index.md)** | OEM (Dell) | 🟡 Backstory for the Dell day-1 play |
-| **[Cycor Projects](./cycor-projects/_index.md)** | Internal | ⏳ Former employer context / wins to carry forward |
+| **[Cycor](./cycor/_index.md)** | Internal | 🟡 Former employer context — origin story doesn't matter, what matters is the process transfers |

@@ -1,11 +1,11 @@
-# Brendan Connors — Origin Story
-
-## Context
-
-This is the backstory behind the Dell day-1 play with Brendan Connors (documented in [oem-partners/Dell](../oem-partners/Dell/_index.md)).
-
-The engagement that led to Brendan mentioning he was friends with the CEO from college and "could use help in a new account" — this will be filled in when the full backstory comes.
+# Brendan Connors — Origin (Deprecated Detail)
 
 ## Status
 
-🟡 Placeholder — details deferred to this bucket. Coming from future voice dictation.
+The origin story behind Brendan Connors (Dell Army tactical) is not what matters. What matters:
+
+- He said "if someone else got there first, that relationship won't save you" — this now works **in your favor**
+- **Call him day 1** at a new VAR and go after the Incom SC account aggressively
+- **He needs help** on a new account he inherited — you can be that help under a new badge
+
+The specific backstory (engaging over a misc-bucket opportunity, ended on a sour note) is noted but not worth deep-diving. **The forward action is the call.**
