@@ -148,28 +148,38 @@ def index_file(filepath, content_bytes):
     except Exception as e:
         return {"status": "error", "error": str(e)}
 
+CRAWL_FOLDERS = [
+    "_system", "Inbox", "Notes", "Josh Stuff",
+    "Projects", "work-queue", "Archive",
+]
+
 def list_docs_folder():
-    """List files in OneDrive/Hermy/docs/ via Graph API."""
+    """List files across OneDrive/Hermy/ subfolders via Graph API."""
+    all_files = []
     try:
-        # Get docs folder
-        resp = graph("GET", f"{GRAPH_BASE}/me/drive/root:/Hermy/docs")
-        folder_id = resp.get("id")
-        if not folder_id:
-            # Create it
-            root = graph("GET", f"{GRAPH_BASE}/me/drive/root:/Hermy")
-            root_id = root.get("id")
-            resp = graph("POST", f"{GRAPH_BASE}/me/drive/items/{root_id}/children",
-                        {"name": "docs", "folder": {}})
-            folder_id = resp.get("id")
-            
-        children = graph("GET", f"{GRAPH_BASE}/me/drive/items/{folder_id}/children")
-        return children.get("value", [])
+        root = graph("GET", f"{GRAPH_BASE}/me/drive/root:/Hermy")
+        root_id = root.get("id")
+        if not root_id:
+            raise ValueError("Could not find Hermy root folder")
     except Exception as e:
-        print(f"Error listing docs folder: {e}")
+        print(f"Error getting Hermy root: {e}")
         return []
 
+    for subfolder in CRAWL_FOLDERS:
+        try:
+            resp = graph("GET", f"{GRAPH_BASE}/me/drive/items/{root_id}:/{subfolder}:/children")
+            items = resp.get("value", [])
+            for item in items:
+                item["_folder"] = subfolder
+            all_files.extend(items)
+        except Exception as e:
+            # Folder might not exist yet — skip silently
+            pass
+    print(f"Found {len(all_files)} files across {len(CRAWL_FOLDERS)} folders")
+    return all_files
+
 def scan_and_index():
-    """Scan OneDrive/Hermy/docs/ and index new/changed files."""
+    """Scan OneDrive/Hermy/ subfolders and index new/changed files."""
     manifest = load_manifest()
     files = list_docs_folder()
     
@@ -191,7 +201,8 @@ def scan_and_index():
             results["errors"] += 1
             continue
         
-        filepath = f"Hermy/docs/{name}"
+        folder = f.get("_folder", "Unknown")
+        filepath = f"Hermy/{folder}/{name}"
         result = index_file(filepath, r.content)
         
         if result["status"] == "indexed":

@@ -1,10 +1,13 @@
-# Kratos — Space Force / Ground-Based Radar Distribution
+# Kratos
 
-> ⚠️ **Important context correction (2026-06-25):** **SEWP** is a GWAC (government-wide acquisition contract vehicle), **not** the award itself. The actual award was a separate Space Force action for ground-based radar distribution systems (or similar) awarded Q1–early Q2 2026 to Kratos as prime contractor. SEWP was how we found the opportunity initially.
+## Timeline Context
 
-## Overview
+| Year | Event |
+|---|---|
+| **2024** | Discovery — **SEWP GWAC** is the contract vehicle that introduced you to Kratos. This is **not** the award; it's the vehicle where you found them. |
+| **2026 (current)** | The **ground-based radar distribution award (Space Force)** is a **completely separate, unrelated** development. This is not the original 2024 connection point. |
 
-Kratos was awarded a **Space Force** contract for **ground-based radar distribution systems** (Q1–early Q2 2026). Kratos owned the contracting and engineering piece as prime. User discovered this through the **SEWP GWAC** and made the intro to Cisco.
+**Key pivot:** The focus was always the relationship and vehicle access from 2024 — the 2026 radar award is a different data point entirely.
 
 ## Key Relationship
 
@@ -16,6 +19,7 @@ Kratos was awarded a **Space Force** contract for **ground-based radar distribut
 | **Status** | ✅ Very friendly, moved to **Sedona** last year |
 | **Personality** | Values deal flow — "play ball" personality. Willing to reciprocate if you bring him business and open doors the right way. Character/integrity conversation noted: not his style of doing business, but his willingness to play ball makes **asking for help opening doors** much easier. |
 | **His Carrot** | Can provide **continued education credits (CEUs)** for engineers attending events — instant value prop, easy to get people in the room. |
+| **Intro origin** | You made the intro between Kratos and Gabe via SEWP in 2024. |
 
 ## Day-1 Strategy (with Gabe)
 

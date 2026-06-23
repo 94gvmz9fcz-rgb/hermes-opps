@@ -42,10 +42,11 @@ Read this before resolving any company/organization name from voice, text, or wr
 | Canonical | Aliases | Airtable Tag | Notes |
 |---|---|---|---|
 | Cisco Systems | Cisco | ✅ Cisco | |
-| Dell Technologies | Dell, Dell EMC | ✅ Dell | Stephen Landry (call sign "Cajon") — Dell Federal BD, AF/Space Force team |
+| Dell Technologies | Dell, Dell EMC | ✅ Dell | Stephen Landry (call sign "Cajun", C-A-J-U-N) — Dell Federal BD, AF/Space Force team. Also tied to Cisco/Kratos initiative. |
+| Kratos Defense & Security Solutions | Kratos | ❌ | Federal systems integrator. Stephen Landry tied to a Cisco/Kratos initiative. |
+| Hewlett Packard Enterprise | HPE | ❌ | Keegan Turcotte — storage solutions consultant |
 
 ## Internal / Misc
-
 | Canonical | Aliases | Airtable Tag | Notes |
 |---|---|---|---|
 | CyKor LLC | CyKor | ✅ CyKor | Both Org Type and Tags |

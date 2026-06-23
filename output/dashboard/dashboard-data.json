@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-06-22T18:44:42.875397+00:00",
+  "generated_at": "2026-06-23T18:03:20.069189+00:00",
   "health": "good",
-  "memory": "2104M / 3915M (54%)",
-  "disk": "27G / 115G (23%)",
-  "uptime": "4d 15h",
+  "memory": "1842M / 3915M (47%)",
+  "disk": "28G / 115G (24%)",
+  "uptime": "5d 15h",
   "crons": "Unknown",
   "crmTotal": "70+",
   "crmRecent": "23 biz cards + 47 VCF",
