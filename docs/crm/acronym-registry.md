@@ -93,6 +93,7 @@ If I surface an acronym you haven't validated, there are two paths:
 | **GSA** | General Services Administration | Contract Vehicle | Federal procurement backbone. Multiple schedules. Most federal buyers can use GSA. |
 | **SEWP** | Solutions for Enterprise-Wide Procurement | Contract Vehicle (NASA-managed, DoD-accessible) | IT-focused. Very common in Josh's space. NASA SEWP V is the current iteration. |
 | **IDIQ** | Indefinite Delivery / Indefinite Quantity | Contract Type | Not a specific vehicle, a contract structure. "We need an IDIQ vehicle for this." |
+| **ITES** | Information Technology Enterprise Solutions | Contract Vehicle (Army) | Army's strategic IT contract vehicle. Also called "Chess" colloquially. Used for strategic partnership acquisitions. |
 | **BAFO** | Best and Final Offer | Acquisition Phase | Final proposal round. "Proposal / BAFO" is the land sequence step before the win. |
 | **RFP** | Request for Proposal | Acquisition Phase | Formal solicitation. |
 | **RFI** | Request for Information | Acquisition Phase | Pre-RFP — market research. |
