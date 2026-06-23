@@ -35,7 +35,7 @@
 
 ## The NetApp Takeout Playbook — Repeatable System
 
-This is a proven, **repeatable** engagement system you built at Cycor that drove results inside one week.
+This is a proven, **repeatable** engagement system you built at CyKor that drove results inside one week.
 
 ### How it worked
 

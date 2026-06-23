@@ -70,6 +70,6 @@ This is the process to bring to Chris at Dell day 1:
 2. **Outlook rules** → auto-route hits to priority review folder
 3. **Power Automate** → WebEx notification for immediate alert
 4. **First-responder review** → Josh + inside sales rep review immediately
-5. **Bring to Dell Army team** → already proved within week 1 at Cycor
+5. **Bring to Dell Army team** → already proved within week 1 at CyKor
 
 > **Key point:** The value isn't the specific week-1 win. It's the **ability to call Chris day 1 and rebuild the same proven system.** The system works. It just needs a new badge underneath it.

@@ -13,7 +13,7 @@ Your exposure came through filtering on **JBLM** (Joint Base Lewis-McChord) for 
 | Detail | Value |
 |---|---|
 | **Your idea** | Offer an **exchange of service** — VAR maintains the network, renewal, new hardware, works proactively with the customer to ensure clean renewal. In return: **protected special pricing**. |
-| **Customer had requirement on** | **2GIT** (Air Force GWAC) — and **Cycor** (your former employer) was **not a prime** on 2GIT |
+| **Customer had requirement on** | **2GIT** (Air Force GWAC) — and **CyKor** (your former employer) was **not a prime** on 2GIT |
 | **You needed** | Requirement moved to **SEWP** (via SEWP, you could respond directly) — required a deep discount to make it work |
 | **Nobody believed** | No one thought they'd move the requirement. Former boss rode you hard on it. |
 
@@ -21,13 +21,13 @@ Your exposure came through filtering on **JBLM** (Joint Base Lewis-McChord) for 
 
 | Name | Role | Notes |
 |---|---|---|
-| **Farzana Tucker** | Dell Renewal Specialist | Took weeks to understand the vision. Very frustrated by how Cycor's team handled the requirement — but not at you specifically. |
+| **Farzana Tucker** | Dell Renewal Specialist | Took weeks to understand the vision. Very frustrated by how CyKor's team handled the requirement — but not at you specifically. |
 | **BJ Maumayhew** | Dell Account Manager | Gave his blessing for the special pricing. Not deeply involved but didn't block it. |
-| **Distributor team rep** | (name TBD) | Also frustrated with Cycor's handling. |
+| **Distributor team rep** | (name TBD) | Also frustrated with CyKor's handling. |
 
 ### The Outcome
 
-> **You thought you lost.** Hope was dead. But the **customer reached out shortly after** — they **did move it to SEWP**. You responded, and **Cycor won the renewal**.
+> **You thought you lost.** Hope was dead. But the **customer reached out shortly after** — they **did move it to SEWP**. You responded, and **CyKor won the renewal**.
 >
 > **Renewal runs through end of CY2026.**
 
