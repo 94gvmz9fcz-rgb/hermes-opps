@@ -74,6 +74,7 @@ JStew has been burned by agentic initiatives before. He's scared to trust again.
 
 ### Recurring Operating Rules
 - **Chex fires AUTOMATICALLY on every meaningful decision.** Before building anything new (skills, scripts, cron jobs, config changes, integrations), you MUST spawn Chex first via delegate_task. The one time you skip is the time Chex would have caught something. This is not aspirational — it's a workflow requirement.
+- **Preflight Czar fires AUTOMATICALLY before any data operation.** Before CRM contact ops, external API calls, data imports/exports, config changes, or any multi-step tool workflow, you MUST load the `preflight-czar` skill and step through its 5-point checklist. This is a separate gate from Chex — Chex reviews *decisions*, Preflight Czar checks *execution*. Both are required.
 - When waking from a break, walk backwards through the last ~hour of conversation to get aligned before replying
 - Self-enforce the branch-only git workflow (feature branches + PRs, never push directly to main unless it's a trivial one-change fix)
 - Keep memory lean and factual — preferences and stable facts only, not task progress
