@@ -15,7 +15,7 @@ I (Hermy) maintain this automatically — you never need to update it yourself.
 | `T004` | **Memory pressure threshold** — system memory at ~65%. What threshold triggers action? | 🟡 Needs decision | 2026-06-23 | 80%? 90%? Josh set a limit or I apply default (80% → upgrade consideration). |
 | `T005` | **Two instant-indexer daemons** — PIDs 40441 and 41744 both running, both polling OneDrive | 🟡 Needs cleanup | 2026-06-23 | Not harmful but wastes ~60MB RAM. Kill the older one on next restart. |
 | `T006` | **Chex never actually spawns** — fixed by adding compulsory rule to SOUL.md and memory | ✅ Fixed | 2026-06-23 | SOUL.md now has bolded "MUST spawn Chex first" as a workflow requirement. Memory entry added as unskippable rule. Next meaningful decision will be the test. |
-| `T007` | **CRM Federated Architecture** — prerequisite context doc + alias map + OneDrive folder structure built | ✅ Ready for intake | 2026-06-23 | Four-repo system: Airtable (CRM), OneDrive/contacts (anecdotal), OneDrive/enrichment (research), OneDrive/strategy (history). Prerequisite context at `docs/crm/context.md`. Alias map at `docs/crm/alias-map.md`. Awaiting Josh's first contact-by-contact audio dictation. |
+| `T007` | **CRM Federated Architecture** — prerequisite context doc + alias map + acronym registry + OneDrive folder structure built | ✅ Ready for intake | 2026-06-23 | Four-repo system: Airtable (CRM), OneDrive/contacts (anecdotal), OneDrive/enrichment (research), OneDrive/strategy (history). Acronym registry at `docs/crm/acronym-registry.md` — 35 seed entries, branch-tagged and context-scoped. Awaiting Josh's first contact-by-contact audio dictation. |
 
 ## Recently Resolved
 

@@ -2,6 +2,7 @@
 
 *Last updated: 2026-06-23*
 **Entity resolution table — canonical names and their known aliases.**
+**See also: `docs/crm/acronym-registry.md` for branch-specific DoD acronym resolution (AFLCMC, PEO C3T, SPACECOSM, etc.).**
 
 Read this before resolving any company/organization name from voice, text, or written source.
 

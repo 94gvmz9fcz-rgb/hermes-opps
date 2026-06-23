@@ -11,7 +11,31 @@ This document exists to prevent confusion, duplication, and embarrassment when w
 
 ---
 
-## Entity Alias Map
+## Acronym Resolution
+
+**Every unfamiliar acronym gets resolved same session.** See `docs/crm/acronym-registry.md` for the full registry — branch-tagged, context-scoped, and growing with every interaction.
+
+### Tiered Resolution
+
+| Tier | Meaning | Action |
+|---|---|---|
+| 🔵 Confident | Expansion + branch scope match public DoD sources | Flagged for Josh's quick review |
+| 🟡 Needs Josh | I have pieces but can't scope without you | Surfaced at session end |
+| 🔴 Unknown | No match in registry or public sources | Build entry together in same interaction |
+
+### Key Acronyms (Quick Reference — See Registry for Full)
+
+| Acronym | Expansion | Branch | Josh Relevance |
+|---|---|---|---|
+| AFLCMC | Air Force Life Cycle Mgmt Center | 🇺🇸 USAF (+ 🚀 Space Force) | Primary AF entry point for IT/modernization |
+| AFNWC | AF Nuclear Weapons Center | 🇺🇸 USAF | Nuclear-specific, not general IT |
+| SPACECOSM | Space Systems Command | 🚀 Space Force | Key USSF entry point |
+| PEO C3T | PEO Cmd Ctrl Comms-Tactical | 🪖 Army | Key Army entry point |
+| IBCS | Integrated Battle Command System | 🪖 Army (NGC prime) | Lawrence Carter under "NGC - IBCS" |
+| JADC2 | Joint All-Domain Cmd & Control | 🌐 All branches | Broad capability vision |
+| INDOPACOM | Indo-Pacific Command | 🌐 Joint combatant cmd | Josh's expansion target |
+
+**Always check the registry before asking Josh what an acronym means.** If it's not there, build an entry before leaving the interaction.
 
 All names in this map are **canonical** (left) with their **known aliases** (right). When Josh mentions an alias in voice or text, resolve to the canonical name before looking up in the CRM.
 
