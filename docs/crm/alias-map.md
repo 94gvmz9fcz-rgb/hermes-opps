@@ -12,7 +12,7 @@ Read this before resolving any company/organization name from voice, text, or wr
 
 | Canonical | Aliases | Airtable Tag? | Notes |
 |---|---|---|---|
-| Northrop Grumman Corporation | NGC, Northrop, Northrop Grumman, NG, NG Corp | ✅ Northrop Grumman | Lawrence Carter = "NGC - IBCS" (IBCS is a program, resolve to NGC) |
+| Northrop Grumman Corporation | NGC, Northrop, Northrop Grumman, NG, NG Corp | ✅ Northrop Grumman | Lawrence Carter is a **purchaser at NGC**, not synonymous with any single program. He may cover IBCS and other programs. See contact-level anecdotal notes in OneDrive/contacts/ for his specific scope. |
 | Red River Technology | Red River, RR | ❌ | |
 | SentinelOne | S1, SentOne | ❌ | Doug Marco contact |
 | Wildflower International | Wildflower Intl | ❌ | Marquiese Hannah contact |

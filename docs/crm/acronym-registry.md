@@ -52,7 +52,7 @@ If I surface an acronym you haven't validated, there are two paths:
 | **PEO IEW&S** | Program Executive Office — Intelligence, Electronic Warfare & Sensors | Army | ISR, electronic warfare, sensor fusion. |
 | **PEO MS** | Program Executive Office — Missiles and Space | Army (through Redstone) | Missile defense, space-related Army programs. |
 | **PEO EIS** | Program Executive Office — Enterprise Information Systems | Army | IT systems, logistics IT, enterprise services. |
-| **IBCS** | Integrated Battle Command System | Army (primary, through NGC) | Air & missile defense program. **Northrop Grumman primes this.** Lawrence Carter in CRM under "NGC - IBCS." |
+| **IBCS** | Integrated Battle Command System | Army (primary, through NGC) | Air & missile defense program. **Northrop Grumman primes this.** Lawrence Carter is a purchaser at NGC whose purview may include IBCS and other programs — not a one-to-one relationship with this program. |
 | **PEO** (alone) | Program Executive Office | Army (generic) | Generic. Always needs context — which PEO? Which branch? |
 | **PM** (acquisition context) | Program Manager | Army (generic) | Not a person — a role/office within a PEO. "PEO C3T → PM Tactical Radios." |
 

@@ -31,7 +31,7 @@ This document exists to prevent confusion, duplication, and embarrassment when w
 | AFNWC | AF Nuclear Weapons Center | 🇺🇸 USAF | Nuclear-specific, not general IT |
 | SPACECOSM | Space Systems Command | 🚀 Space Force | Key USSF entry point |
 | PEO C3T | PEO Cmd Ctrl Comms-Tactical | 🪖 Army | Key Army entry point |
-| IBCS | Integrated Battle Command System | 🪖 Army (NGC prime) | Lawrence Carter under "NGC - IBCS" |
+| IBCS | Integrated Battle Command System | 🪖 Army (NGC prime) | Lawrence Carter's purview as a purchaser at NGC — not a one-to-one mapping |
 | JADC2 | Joint All-Domain Cmd & Control | 🌐 All branches | Broad capability vision |
 | INDOPACOM | Indo-Pacific Command | 🌐 Joint combatant cmd | Josh's expansion target |
 
