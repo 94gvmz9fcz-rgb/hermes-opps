@@ -110,7 +110,7 @@ This is a compact version of the full federated architecture. See the full desig
 | # | Repository | Primary Location | Contents |
 |---|---|---|---|
 | 1 | CRM | Airtable (Contacts table) | Entity registry — names, companies, titles, contact info. Source of truth for "who exists." |
-| 2 | Anecdotal Feedback | `OneDrive/Hermy/contacts/{Company}/{Name}.md` | Josh's personal observations, relationship history, personality notes per contact. Flagged in CRM by `Has Notes` checkbox + `Notes Link` URL button. |
+| 2 | Anecdotal Feedback | `OneDrive/Hermy/contacts/{Company}/{Name}.md` | Josh's personal observations, relationship history, personality notes per contact. Flagged in CRM by `Has Notes ✅` checkbox + `Notes Link 🔗` URL field — tap to open in OneDrive. |
 | 3 | Enrichment Vault | `OneDrive/Hermy/enrichment/{Company}.md` + mirror in `docs/enrichment/` | Research: ChatGPT context extracts, independent findings, verified intel, open questions. |
 | 4 | Business History & Strategy | `OneDrive/Hermy/strategy/{Category}.md` + mirror in `docs/strategy/` | Wins, losses, burns, strategic vision, program history, capability briefs. |
 | 5 | Prerequisite Context | `docs/crm/context.md` (this file) | Aliases, naming rules, and process guardrails. Must be read before any CRM work. |
