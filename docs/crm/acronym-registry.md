@@ -94,6 +94,7 @@ If I surface an acronym you haven't validated, there are two paths:
 | **SEWP** | Solutions for Enterprise-Wide Procurement | Contract Vehicle (NASA-managed, DoD-accessible) | IT-focused. Very common in Josh's space. NASA SEWP V is the current iteration. |
 | **IDIQ** | Indefinite Delivery / Indefinite Quantity | Contract Type | Not a specific vehicle, a contract structure. "We need an IDIQ vehicle for this." |
 | **ITES** | Information Technology Enterprise Solutions | Contract Vehicle (Army) | Army's strategic IT contract vehicle. Also called "Chess" colloquially. Used for strategic partnership acquisitions. |
+| **2GIT** | — (Air Force GWAC — Government-Wide Acquisition Contract) | Contract Vehicle (USAF) | Air Force's IT GWAC. Used for submitting quotes via strategic partners. "2GIT" appears to be the contracting vehicle name. Megan Potcer's org was a strategic partner for 2GIT quoting. |
 | **BAFO** | Best and Final Offer | Acquisition Phase | Final proposal round. "Proposal / BAFO" is the land sequence step before the win. |
 | **RFP** | Request for Proposal | Acquisition Phase | Formal solicitation. |
 | **RFI** | Request for Information | Acquisition Phase | Pre-RFP — market research. |

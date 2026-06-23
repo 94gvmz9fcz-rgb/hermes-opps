@@ -42,7 +42,7 @@ Read this before resolving any company/organization name from voice, text, or wr
 | Canonical | Aliases | Airtable Tag | Notes |
 |---|---|---|---|
 | Cisco Systems | Cisco | ✅ Cisco | |
-| Dell Technologies | Dell, Dell EMC | ✅ Dell | |
+| Dell Technologies | Dell, Dell EMC | ✅ Dell | Stephen Landry (call sign "Cajon") — Dell Federal BD, AF/Space Force team |
 
 ## Internal / Misc
 
