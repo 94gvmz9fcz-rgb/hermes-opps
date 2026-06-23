@@ -66,7 +66,8 @@ The current Dell storage renewal runs through end of CY2026 — the next window 
 | Step | Detail |
 |---|---|
 | **Target** | **HNI Contracting Officer (KO)** — "KO" because "CO" was already taken |
-| **Name** | **Rihanna** (last name TBD) |
+| **Name** | **Rihanna** (last name — handled by Josh once employed) |
+| **Role** | KO at the **G6 office** |
 | **How to find her** | **2GIT feed** or **Govly** (G-O-V-L-Y) — email and phone within minutes |
 | **Your pitch** | "I was the brains behind the vision that was sold to you. I'm now at **[new company]** . I'd love to talk to your team about the upcoming renewal, and at this new organization, I can support it on the **contract vehicle the Air Force prefers**." |
 

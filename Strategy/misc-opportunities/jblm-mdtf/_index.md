@@ -53,6 +53,6 @@ On your own research (US Congress site was a primary source):
 
 | Name | Role | Status |
 |---|---|---|
-| **CW4 (name TBD)** | Chief Warrant Officer 4, 1st Corps JBLM | ✅ Warm — opened the door, clarified MDTF details |
+| **CW4 Mandel** | Chief Warrant Officer 4, 1st Corps JBLM | ✅ Warm — opened the door, clarified MDTF details |
 | **Palo Alto engineer (name TBD)** | Palo team supporting JBLM | 🟡 Bridge to MDTF intel |
 | **Pure Storage AM (name TBD)** | Account manager at Pure | ✅ Friendly, co-campaign partner |
