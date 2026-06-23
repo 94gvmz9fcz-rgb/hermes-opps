@@ -24,11 +24,36 @@ A new prototyping initiative called **Atlas** (4x4 / dune buggy platform) is als
 
 Trish, Roy, and Lawrence are all procurement folks at different seniority/influence levels — specific details to come.
 
-## Attack Plan (placeholder for capture plan deliverable)
+## Attack Plan Strategy (to be formalized — vague & generic until full context)
 
-- **Day-1 priority at any new NGC VAR:** Reach out to **Jacob + Ray** with proper NDA pathway (informed by Sarai's onboarding experience)
+### Philosophy
+
+The attack plan / strategy document should remain **extremely vague and generic** at this stage. The one-pager or snapshot brief that would be presented to a future employer should not give away the entire recipe.
+
+The snapshot should be a **high-level review** covering:
+
+- SI ecosystem
+- OEM partnerships
+- Internal capability briefs
+- Relationships & standings
+
+The real value is pulling from the **litany of separated resources** (FSI POIs, customer depth, OEM partners, misc opportunities, capabilities & toolkit) to diagnose:
+
+| Timeline | Classification |
+|---|---|
+| **Easiest / most immediate** | Few pieces to move — documented and wired |
+| **Short-term** | Some lift required |
+| **Medium / long-term** | Significant pieces need to be moved or put into play |
+
+### Timing
+
+> ⏳ **Waiting on full ChatGPT context export** — confirmation received ~18hrs ago that the email export is being worked on. Context dump is required before running with this in a meaningful way.
+
+### Day-1 signal (for reference when scoping)
+
+- Reach out to **Jacob + Ray** with proper NDA pathway (informed by Sarai's onboarding)
 - NDA pathway already documented through Sarai's connection
 - Once NDA is in place: deep-dive procurement relationships (Trish, Roy, Lawrence)
-- Full relational map forming as more detail comes
 
-> ⏰ **Circle for capture plan deliverable** — formal write-up of the full NGC/IBCS attack plan with action items, timeline, and contact sequence. Separate deliverable from this POI tracking.
+> ⏰ **Circle for capture plan deliverable** — to be built once full ChatGPT context lands.
+
