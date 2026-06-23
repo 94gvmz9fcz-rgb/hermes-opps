@@ -14,7 +14,7 @@ A new prototyping initiative called **Atlas** (4x4 / dune buggy platform) is als
 |---|---|---|---|
 | **Sarai Carabello** | Supplier onboarding / contract POC | ✅ POI tracked | Helped user go from NGC supplier → C2 supplier across 5–6 programs. Strange POC — appeared in contractual position (NDA completion) and one-off procurement (proposal outside normal process, OEM AMs hadn't heard of it). |
 | **Jacob Pouncy** | Atlas Program Manager | ✅ POI tracked | RFQ leak discovered his contact info accidentally — after 18 months of reaching out, got a capability brief set up. **Day-1 priority at any new VAR inside NGC ecosystem.** |
-| **Ray ____** | Senior Network Engineer, Atlas | ⚠️ Last name needed | "The big dog" on the Atlas brief alongside Jacob. Attended the capability brief. **Day-1 priority with Jacob.** |
+| **Ray ____** | Senior Network Engineer, Atlas | ⏳ Last name — Josh will provide when the time comes | "The big dog" on the Atlas brief alongside Jacob. Attended the capability brief. **Day-1 priority with Jacob.** |
 | **Patricia "Trish" Flores** | Procurement (seniority TBD) | ✅ CRM Pet 1162 | Note created. Procurement team. |
 | **Roy Cooper** | Procurement (seniority TBD) | ✅ CRM — found | Procurement team. |
 | **Lawrence Carter** | Procurement (seniority TBD) | ✅ CRM Pet 1098 | Procurement team. Note updated with IBCS context. |

@@ -9,7 +9,7 @@ Serco now owns the **DMOC** (Distributed Mission Operations Center) program, per
 | Name | Role | Status | Notes |
 |---|---|---|---|
 | **Amy Nugent** | DMOC connection | ✅ Warm contact | **Day-1 priority** — call to try and set up an intro to the Kirtland team / DMOC program. User broke into DMOC around the timeframe of the Amy Nugent story. |
-| **Sammy Mustafa** | Senior Network Engineer, DMOC | ✅ Known from previous employer | Very familiar with user from previous employer. Supports DMOC at Serco. LinkedIn URL may be needed if not in CRM. |
+| **Sammy Mustafa** | Senior Network Engineer, DMOC | ✅ Known from previous employer | Very familiar with user from previous employer. Supports DMOC at Serco. LinkedIn available when needed. |
 
 ## Day-1 Action
 
