@@ -130,8 +130,11 @@ if __name__ == "__main__":
         print(json.dumps(result, indent=2))
     
     elif command == "list":
-        limit = int(sys.argv[2]) if len(sys.argv) > 2 else 10
         unresolved = "--unresolved" in sys.argv
+        limit = 10
+        for arg in sys.argv[2:]:
+            if arg != "--unresolved" and arg.isdigit():
+                limit = int(arg)
         results = list_corrections(limit, unresolved)
         print(json.dumps(results, indent=2))
     

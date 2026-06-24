@@ -1,0 +1,66 @@
+{
+  "files": [
+    {
+      "path": "pod-supervisor-design-v1.1.md",
+      "size": 2133,
+      "modified": 1782257057.533393
+    },
+    {
+      "path": "pod-supervisor-design.md",
+      "size": 3411,
+      "modified": 1782253454.235555
+    },
+    {
+      "path": "pod-supervisor-trail-dog.md",
+      "size": 2303,
+      "modified": 1782258207.3970277
+    },
+    {
+      "path": "pod-supervisor-design-v1.md",
+      "size": 4817,
+      "modified": 1782257000.0031302
+    },
+    {
+      "path": "reference/ngc-email-pattern.md",
+      "size": 1299,
+      "modified": 1782343314.0587416
+    },
+    {
+      "path": "capability-briefs/Amy Nugent.md",
+      "size": 4383,
+      "modified": 1782343295.3768013
+    }
+  ],
+  "folders": [
+    "reference",
+    "customer-depth",
+    "misc-opportunities",
+    "program-history",
+    "capabilities-and-toolkit",
+    "oem-partners",
+    "former-colleagues",
+    "wins",
+    "people-of-interest",
+    "losses",
+    "burns",
+    "capability-briefs",
+    "customer-depth/af",
+    "customer-depth/af/JBLM",
+    "customer-depth/af/Hanscom-AFB",
+    "misc-opportunities/cykor",
+    "misc-opportunities/brendan-connors-origin",
+    "misc-opportunities/jblm-mdtf",
+    "oem-partners/Dell",
+    "oem-partners/Cisco",
+    "oem-partners/HPE",
+    "people-of-interest/oem-vendors",
+    "people-of-interest/misc",
+    "people-of-interest/customers",
+    "people-of-interest/fsi",
+    "people-of-interest/fsi/Serco",
+    "people-of-interest/fsi/Paraton",
+    "people-of-interest/fsi/Kratos",
+    "people-of-interest/fsi/Northrop-Grumman",
+    "people-of-interest/fsi/Cisco"
+  ]
+}
