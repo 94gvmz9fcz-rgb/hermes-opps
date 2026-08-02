@@ -35,10 +35,31 @@ def check_crons():
     
     return results
 
+def find_venv_site_packages():
+    """Locate the hybrid-env site-packages dir robustly.
+    HOME can resolve differently between cron (/opt/data) and interactive
+    (/opt/data/home) shells, so fall back to candidate roots until found."""
+    candidates = []
+    for root in (HOME, "/opt/data/home", "/opt/data"):
+        p = os.path.join(root, ".hermes", "hybrid-env")
+        if os.path.isfile(os.path.join(p, "bin", "activate")):
+            candidates.append(p)
+    # dedupe, keep order
+    seen = set()
+    for p in candidates:
+        if p not in seen:
+            seen.add(p)
+            matches = sorted(glob.glob(os.path.join(p, "lib", "python*", "site-packages")))
+            if matches:
+                return matches[-1]  # most recent python version
+    return None
+
 def check_chromadb():
     """Verify ChromaDB responds and has data."""
     try:
-        sys.path.insert(0, os.path.join(HOME, ".hermes", "hybrid-env", "lib", "python3.13", "site-packages"))
+        sp = find_venv_site_packages()
+        if sp:
+            sys.path.insert(0, sp)
         import chromadb
         client = chromadb.PersistentClient(path=HYBRID_DB)
         collection = client.get_collection("hermes-hybrid")
