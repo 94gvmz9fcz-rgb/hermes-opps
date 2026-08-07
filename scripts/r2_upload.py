@@ -40,7 +40,69 @@ def sigv4(ak, sk, region, host, method, path, query, headers, payload_hash):
     auth = f"AWS4-HMAC-SHA256 Credential={ak}/{scope}, SignedHeaders={signed_headers}, Signature={signature}"
     return auth, amz_date
 
+def prune(account, ak, sk, bucket, keep_days=14):
+    """List R2 objects and delete those older than keep_days (parsed from key
+    dates like hermes-backup-YYYY-MM-DD.tar.gz). Returns (deleted, kept)."""
+    import re
+    host = f"{account}.r2.cloudflarestorage.com"
+    def req(method, path, query=""):
+        now = datetime.datetime.now(datetime.timezone.utc)
+        amz = now.strftime("%Y%m%dT%H%M%SZ")
+        headers = {"host": host, "x-amz-content-sha256": sha256_hex(b""), "x-amz-date": amz}
+        ch = "".join(f"{k.lower()}:{v.strip()}\n" for k, v in sorted(headers.items()))
+        sh = ";".join(sorted(headers.keys()))
+        ds = now.strftime("%Y%m%d")
+        scope = f"{ds}/auto/s3/aws4_request"
+        cr = "\n".join(["GET" if method == "GET" else "DELETE", path, query, ch, sh, sha256_hex(b"")])
+        sts = "\n".join(["AWS4-HMAC-SHA256", amz, scope, sha256_hex(cr.encode())])
+        k1 = sign(("AWS4" + sk).encode(), ds); k2 = sign(k1, "auto"); k3 = sign(k2, "s3"); k4 = sign(k3, "aws4_request")
+        sig = hmac.new(k4, sts.encode(), hashlib.sha256).hexdigest()
+        headers["Authorization"] = f"AWS4-HMAC-SHA256 Credential={ak}/{scope}, SignedHeaders={sh}, Signature={sig}"
+        url = f"https://{host}{path}" + (f"?{query}" if query else "")
+        r = urllib.request.Request(url, method=method)
+        for k, v in headers.items():
+            r.add_header(k, v)
+        try:
+            with urllib.request.urlopen(r, timeout=60) as resp:
+                return resp.status, resp.read().decode()
+        except urllib.error.HTTPError as e:
+            return e.code, e.read().decode()[:200]
+    # list
+    status, body = req("GET", f"/{bucket}", "list-type=2")
+    deleted = kept = 0
+    try:
+        import xml.etree.ElementTree as ET
+        root = ET.fromstring(body)
+        ns = {"s3": "http://s3.amazonaws.com/doc/2006-03-01/"}
+        for c in root.findall(".//s3:Contents", ns):
+            key = c.findtext("s3:Key", "", ns)
+            m = re.search(r"(\d{4})-(\d{2})-(\d{2})", key)
+            if not m:
+                kept += 1
+                continue
+            d = datetime.date(int(m.group(1)), int(m.group(2)), int(m.group(3)))
+            if (datetime.date.today() - d).days > keep_days:
+                req("DELETE", f"/{bucket}/{key}")
+                deleted += 1
+            else:
+                kept += 1
+    except Exception as e:
+        print(f"R2_PRUNE_ERR {e} (status {status}, body {body[:120]})", file=sys.stderr)
+        return
+    print(f"R2_PRUNE_OK deleted={deleted} kept={kept}")
+
+
 def main():
+    if len(sys.argv) >= 2 and sys.argv[1] == "--prune":
+        conf = json.loads(CONF.read_text())
+        ak = os.environ.get("R2_ACCESS_KEY_ID") or os.environ.get("R2_ACCESS_KEY")
+        sk = os.environ.get("R2_SECRET_ACCESS_KEY") or os.environ.get("R2_SECRET")
+        bucket = os.environ.get("R2_BUCKET", "hermes-backups")
+        if not ak or not sk:
+            print("R2_ACCESS_KEY_ID / R2_SECRET_ACCESS_KEY not set", file=sys.stderr)
+            sys.exit(2)
+        prune(conf["account_id"], ak, sk, bucket)
+        return
     if len(sys.argv) < 2:
         print("usage: r2_upload.py <local_file> [<r2_key>]", file=sys.stderr)
         sys.exit(2)

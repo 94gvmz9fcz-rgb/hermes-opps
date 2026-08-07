@@ -33,11 +33,13 @@ Run Hermes + all crons + pod + fleet as a 24/7 always-on service, independent of
 
 ## OPEN ITEMS (Josh actions)
 1. ~~OpenRouter weekly limit~~ — **RESOLVED by re-routing** (CEO → deepseek-chat, all aux → OpenAI). OpenRouter top-up now OPTIONAL: only needed to restore the claude-sonnet-4 CEO driver later.
-2. **OneDrive re-auth** — source container (hermes@5f8e422c75d2) is gone; onedrive_graph.py + token were lost with it. Device-code flow: https://login.microsoft.com/device (client 14d82eec-204b-4c2f-b7e8-296a70dab67e). Helper to be rebuilt at `/opt/data/home/.config/hermy/onedrive_graph.py`.
+2. **OneDrive re-auth** — device-code flow, fresh code minted per request (client 14d82eec-204b-4c2f-b7e8-296a70dab67e). On approval: rebuild helper at `/opt/data/home/.config/hermy/onedrive_graph.py` + token, resume inbox scan / cloud backup upload / session-history import.
 3. **polymarket.us signing key** — `/opt/data/.polymarket-us-key` missing (intentionally excluded from backups). Needed only for account/order ops; regenerate from the polymarket.us portal if order-capable jobs return.
-4. **Retire old droplet 157.230.163.72** (and confirm source container is destroyed) — stop paying.
-5. **Weekly DO snapshot** — reminder cron now handles it (Sat 9am).
-6. **Session history** — droplet sessions DB is fresh (only post-cutover sessions). Historical context recoverable from OneDrive state exports once (2) is done.
+4. **GitHub push** — droplet deploy key generated (`/root/.ssh/github_deploy.pub`, comment hermes-droplet); add to `94gvm9zfc-rgb/hermes-opps` + `multi-market-pod` (Settings → Deploy keys) → then push tags/branches.
+5. **Retire old droplet 157.230.163.72** — no DO API token on box; console steps: DO panel → droplet → Snapshots (create) → Destroy. (gpt-5 + AStew verdict: retire after snapshot; unknown state + no creds = liability.)
+6. ~~Offsite backups~~ — **RESOLVED**: nightly tarball + state export → Cloudflare R2 `hermes-backups` (sigv4, no deps) + DO snapshot reminder (Sat 9am cron).
+7. ~~Cloudflare R2 email pipeline~~ — **RESOLVED**: `.cf_config.json` recreated from skill reference (was lost with /opt/data/tmp); email check + bucket verified live.
+8. **Session history** — droplet sessions DB is fresh; import from OneDrive state exports once (2) is done.
 
 ## Migration data path (historical)
 - Source box → droplet: `do_droplet_key` (pulled from Mac) → direct `scp`/`tar` over SSH

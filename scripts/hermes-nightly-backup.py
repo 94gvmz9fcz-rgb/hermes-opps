@@ -21,6 +21,8 @@ paths = [
     os.path.join(HOME_DIR, "skills"),
     os.path.join(REPO_DIR, "docs"),
     os.path.join(REPO_DIR, "scripts"),
+    os.path.join(HOME_DIR, "exports"),          # state exports + hybrid-db.sql dump
+    os.path.join(HOME_DIR, "cron"),             # jobs.json registry — restores the whole fleet on DR
     os.path.join(HOME_DIR, ".hermes"),              # memory.md, watchdog state, cron scratch — the durable agent state
     # ---- ENGINE DURABILITY (the whole prediction engine) ----
     POD_DIR,   # all python + cases/ ledgers (track_record, pmus_paperlog, KXCPI, gate state) + RESTORE.md
@@ -39,6 +41,18 @@ def _filter(tarinfo):
     return tarinfo
 
 existing = [p for p in paths if os.path.exists(p)]
+
+# Postgres dump (hybrid DB) — DR completeness: the DB is small today; dump it
+# into exports/ so the tarball carries it (exports is in `paths` below).
+try:
+    os.makedirs(os.path.join(HOME_DIR, "exports"), exist_ok=True)
+    dump_path = os.path.join(HOME_DIR, "exports", "hybrid-db.sql")
+    with open(dump_path, "w") as f:
+        subprocess.run(["su", "postgres", "-c", "pg_dump hybrid"], stdout=f,
+                       timeout=120, check=False)
+    print(f"PG dump written: {dump_path}")
+except Exception as e:
+    print(f"PG dump skipped: {e}")
 
 if not existing:
     print("Nothing to back up — no source paths found.")
@@ -103,6 +117,10 @@ if os.path.exists(R2KEYS):
             print(f"R2 uploaded: {up.stdout.strip()}")
         else:
             print(f"R2 upload failed: {up.stderr.strip()[:200]}")
+        pr = subprocess.run(["python3", "/opt/data/scripts/r2_upload.py", "--prune"],
+                            capture_output=True, text=True, timeout=120, env=env)
+        if pr.returncode == 0:
+            print(f"R2 prune: {pr.stdout.strip()}")
     except Exception as e:
         print(f"R2 upload unavailable: {e}")
 else:
