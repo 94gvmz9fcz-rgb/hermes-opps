@@ -1,4 +1,7 @@
-# Cloud Migration Runbook — AStew/JStew system
+# Cloud Migration Runbook — STATUS: ✅ COMPLETE (2026-08-07)
+
+**GitHub:** ✅ DONE — PAT configured via credential store (/root/.git-credentials, helper=store), hermes-opps + multi-market-pod pushed.
+**OneDrive:** ✅ DONE — device-flow token (Files.ReadWrite.All), helper rebuilt at /opt/data/home/.config/hermy/, token in R2 backup manifest (never lose again). — AStew/JStew system
 **Status: CUTOVER COMPLETE — droplet is the sole Hermes home (2026-08-07).** Fleet re-enabled, pod drift-audited, backups verified.
 **Droplet:** `ubuntu-s-2vcpu-4gb-amd-nyc1` / IP `134.122.21.188` / Ubuntu 24.04.4 LTS / 2vCPU / 3.8GB / 77GB
 

@@ -24,6 +24,7 @@ paths = [
     os.path.join(HOME_DIR, "exports"),          # state exports + hybrid-db.sql dump
     os.path.join(HOME_DIR, "cron"),             # jobs.json registry — restores the whole fleet on DR
     os.path.join(HOME_DIR, ".hermes"),              # memory.md, watchdog state, cron scratch — the durable agent state
+    os.path.join(HOME_DIR, "home/.config/hermy"),   # OneDrive token + graph helper — NEVER lose OAuth access again (2026-08-07 lesson)
     # ---- ENGINE DURABILITY (the whole prediction engine) ----
     POD_DIR,   # all python + cases/ ledgers (track_record, pmus_paperlog, KXCPI, gate state) + RESTORE.md
     # NOTE: the API signing credential (/opt/data/.polymarket-us-key) is
