@@ -150,7 +150,7 @@ def index_file(filepath, content_bytes):
 
 CRAWL_FOLDERS = [
     "_system", "Inbox", "Notes", "Josh Stuff",
-    "Projects", "work-queue", "Archive",
+    "Projects", "work-queue", "Archive", "docs",
 ]
 
 def list_docs_folder():
