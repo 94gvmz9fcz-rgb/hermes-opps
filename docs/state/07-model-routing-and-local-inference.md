@@ -10,12 +10,12 @@ The target is not to replace OpenAI with one free model. The target is to make O
 
 As of this document:
 
-- Primary model/provider: `gpt-5.5` via `openai-api`.
+- Primary model/provider: `deepseek-chat` via `deepseek` direct API.
 - Compression: enabled.
 - Memory: enabled.
 - OpenRouter response cache setting: enabled.
-- Additional provider credentials visible in the current runtime: OpenRouter configured; other cheap/direct providers not configured.
-- Hermes CLI binary is available at `/opt/hermes/.venv/bin/hermes`; it may not be on the default tool shell `PATH`.
+- OpenRouter is configured for cheap auxiliary routes and delegation; premium OpenAI remains available for explicit architecture/judgment/personality work.
+- Hermes CLI binary is not on the default tool shell `PATH` in this environment.
 - Local cloud runtime has limited RAM for serious local inference; Josh's iPad Pro M5 should be treated as a promising local compute lane, not ignored.
 - OpenRouter smoke test succeeded using `qwen/qwen-2.5-7b-instruct`.
 
