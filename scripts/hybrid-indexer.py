@@ -12,12 +12,19 @@ import json, os, sys, hashlib, re
 from pathlib import Path
 from datetime import datetime, timezone
 
-# Hybrid env
-sys.path.insert(0, str(Path.home() / ".config" / "hermy"))
+# Hybrid env — probe all roots for the hermy helper (HOME drifts between
+# /root, /opt/data and /opt/data/home across cron vs interactive shells).
+import os
+_HERMY_ROOTS = [os.path.expanduser("~"), "/opt/data/home", "/opt/data", "/root"]
+for _r in _HERMY_ROOTS:
+    _p = os.path.join(_r, ".config", "hermy")
+    if os.path.isfile(os.path.join(_p, "onedrive_graph.py")):
+        sys.path.insert(0, _p)
+        break
 from onedrive_graph import graph, GRAPH
 
 GRAPH_BASE = GRAPH
-MANIFEST_PATH = Path.home() / ".hybrid-manifest.json"
+MANIFEST_PATH = Path("/opt/data/.hybrid-manifest.json")
 DB_PATH = "/opt/data/.hybrid-db"
 
 # File types we can index
