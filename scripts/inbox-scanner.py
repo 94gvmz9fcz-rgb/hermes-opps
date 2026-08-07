@@ -7,11 +7,32 @@ and reports to Josh in the morning standup.
 import json
 import os
 import sys
+import time
 from pathlib import Path
 from datetime import datetime, timezone, timedelta
 
-sys.path.insert(0, str(Path.home() / ".config" / "hermy"))
-from onedrive_graph import graph, GRAPH
+# Add the config directory to the path.
+# HOME-drift fix (2026-08-07): under cron HOME=/opt/data, Path.home() resolves
+# to /opt/data but onedrive_graph lives at /opt/data/home/.config/hermy. Probe
+# both roots so the import never breaks regardless of how cron sets HOME.
+_hermy_config = None
+for _root in (os.environ.get("HOME", ""), "/opt/data/home", "/opt/data"):
+    _p = os.path.join(_root, ".config", "hermy")
+    if os.path.isfile(os.path.join(_p, "onedrive_graph.py")):
+        _hermy_config = _p
+        break
+if _hermy_config:
+    sys.path.insert(0, _hermy_config)
+else:
+    sys.path.insert(0, str(Path.home() / ".config" / "hermy"))  # best-effort fallback
+
+# Import the onedrive-graph skill
+try:
+    from onedrive_graph import graph, GRAPH
+except ImportError as e:
+    print(f"Error: Failed to import onedrive_graph: {e}")
+    print("\nSTATUS=ERROR:MissingSkill")
+    sys.exit(1)
 
 GRAPH_BASE = GRAPH
 
