@@ -1,113 +1,64 @@
 # 🧭 Herms Dashboard
 
-*Last updated: 2026-06-22*
+*Last updated: 2026-08-07*
+
+> NOTE: June-era operating layer (Read My Mind / CRM / Siri) has been SUPERSEDED by the
+> money-projects. Live state for each venture lives in its own repo (see Links column).
 
 ---
 
-## ⚡ Active
+## ⚡ Active Ventures
 
-| What | Status | Started | Note |
+| Venture | Status | Notes | Live state |
 |---|---|---|---|
-| Read My Mind intake | ✅ Live | 06-22 | Universal capture-first pipeline active |
-| Hybrid Architecture (local offload) | ✅ LIVE | 06-22 | ChromaDB seeded, query bridge works, hourly indexer, →local command |
-| Airtable CRM | 🟢 Ready — token live, 16 fields set | 06-21 | Awaiting Josh's black book data |
-| Memory compression cron | ✅ Live | 06-22 | 02:45 UTC daily |
-| Work brain — Phase 1 & 2 | 🟢 Built | 06-22 | `docs/josh/` — 5 docs |
-| Siri Shortcut → Herms | 🔄 Untested | 06-21 | Guide ready
+| **Project TT** (MAP-violation evidence fleet) | 🟢 3 flagship demos, hashed-verified | Rocky (−33.9%), Muck (4 viol), Gerber (2 viol). Generic 1-command brand fleet | `/opt/data/project-tt/PROJECT_TT.md` |
+| **Pickaxe** (cross-venue correlation dataset + track record) | 🟢 Data accumulating | Paper gate 6/150, 0 banked resolved wins. Tamper-evident ledger | `/opt/data/kalshi-pod/PICKAXE_NARRATIVE.md` |
+| **$50X trading pod** (edge-detect → paper → gate → $50) | 🟡 Gate CLOSED by design | Arb refuted on real data. Edge = event-timing (CPI Aug-12). 0 resolved confirmatory | `/opt/data/kalshi-pod/STATUS.md` |
+| **Macro-forecast lane** | 🟡 **NOT BUILT — AStew debt** | Event-window infra live (event_calendar, event_sniffer); forecast model TBD | kalshi-pod + `/opt/data/scripts/event_calendar.py` |
+
+---
+
+## 🚦 Infrastructure Health
+
+| System | Status | Notes |
+|---|---|---|
+| Crons (Kalshi pod + services) | 🟢 Mostly green | 8 no_agent capture lanes + supervisors. See individual jobs |
+| v2 Track-1/3 | 🟢 Fixed (was path-blocked) | real-file fix 2026-08-07 |
+| v2 Track-4 / front2 | 🟢 Fix applied, next scheduled run | same root cause |
+| edge-lead-review | ⏸️ Paused (redundant, iteration-burn) | revisit when market wakes |
+| followup-checker | 🟢 Revived (was dead since Jun) | stale reminders cleared, silent exit 0 |
+| GitHub | 🟢 Clean | no open issues/PRs; kalshi-pod + hermes-opps pushed |
 
 ---
 
 ## 📋 Next Up (Priority Order)
 
-| # | Project | Why Now |
-|---|---|---|
-| 1 | **CRM data re-import** — map 110 contacts to fields, generate invite link | Last blocking item before CRM operational |
-| 2 | **Test Siri Shortcut** — "Hey Siri, tell Herms..." voice pipeline | < 5 min, Josh does when near phone |
-| 3 | **Test Junk Drawer file pipeline** — drop a real file | Verify end-to-end before daily use |
-| 4 | **OpenRouter integration** — cheap model routing | Cost optimization after base infra stable |
-| 5 | **Chex rollout** — adversarial review passes | Once core infra settled |
-| 6 | **Meta Glasses integration** | After Telegram pipeline rock-solid |
+| # | Item | Owner | Blocked on |
+|---|---|---|---|
+| 1 | Fix v2-track4 + front2 next scheduled run confirm | AStew | (auto) |
+| 2 | Build macro-forecast model — before CPI Aug-12 | AStew | none (owed) |
+| 3 | Review 3 unstaged hermes-opps refactors (email-pipeline, health-monitor, strategy-sync) | JStew/AStew | JStew decision |
+| 4 | TT: pick lead brand for ready-to-send audit packet | JStew | decision |
 
 ---
 
-## 🧭 Recent Decisions
+## 🧭 Superseded (June-era, tabled — not active)
+
+| Item | Status |
+|---|---|
+| CRM (Jermy's) | 🔴 Tabled until Josh employed |
+| Siri Shortcut → Herms | 🔄 Tabled |
+| Junk Drawer pipeline | 🔄 Tabled |
+| Read My Mind intake | ✅ Built, low priority now |
+
+---
+
+## 🧭 Recent Decisions (see live kalshi-pod/DECISIONS_LOG.md for full)
 
 | Date | Decision |
 |---|---|
-| 06-22 | Memory → navigation pointers + daily compression cron at 02:45 UTC |
-| 06-22 | Decision log enriched: journal format with daily entries |
-| 06-22 | Weekly health checks established (memory %, cron success, disk) |
-| 06-22 | Read My Mind — universal capture-first intake pipeline |
-| 06-22 | Image pipeline via EasyOCR + Junk Drawer shortcut |
-| 06-22 | Herms Dashboard — personal operating layer home base |
-| 06-20 | Branch self-enforcement (free GitHub, no real rulesets) |
-| 06-20 | OneDrive/Hermy as active shared workspace |
-| 06-20 | Cost control as first-class constraint |
-| 06-19 | Telegram as primary chat surface |
-
-Full details and daily journals: [decisions-log.md](../state/02-decisions-log.md)
-
----
-
-## 🏗️ Pipeline Status
-
-| Pipeline | Status | Last Action |
-|---|---|---|
-| **Junk Drawer** (file intake) | 🟢 Ready — needs test | `intake-webhook.py` running on :9999 |
-| **Image OCR** | 🟢 Ready — needs test | `image-pipeline.py` committed, EasyOCR cached |
-| **Siri → Herms** | 🟢 Setup done — needs test | Shortcut guide at `junk-drawer-setup.md` |
-| **Memory compression** | 🟢 Running | 02:45 UTC daily |
-| **Cron: Nightly backup** | 🟢 Running | 23:00 UTC, saves to OneDrive |
-| **Cron: State export** | 🟢 Running | 23:15 UTC |
-| **Cron: Token tracker** | 🟢 Running | 09:00 UTC daily (commented: "just hermy") |
-| **Cron: Morning standup** | 🟢 Running | 03:00 UTC |
-
----
-
-## 📦 OneDrive/Hermy Layout
-
-| Folder | Purpose | Contents |
-|---|---|---|
-| `Inbox/` | Files ingested, awaiting your action | Empty |
-| `Read Later/` | Links saved for future follow-up | Empty |
-| `Captures/` | Half-thoughts captured silently | Empty |
-| `Junk Drawer/` | Raw dropped files (technical landing zone) | Empty |
-| `Photos/` | Business cards, whiteboards, receipts | Empty |
-| `Resources/` | Reference material (profile pics, shared assets) | Empty |
-| `Backups/` | Cron-generated nightly state snapshots | Active |
-| `Josh Stuff/` | Source exports, Apollo CSVs, resumes | CRM source data |
-
----
-
-## 📊 Quick Status
-
-| Check | Value |
-|---|---|
-| Memory usage | **45%** — 990/2,200 chars (down from 95%) |
-| Memory compression | Auto at 02:45 UTC daily, triggers at 60%+ |
-| Decision log | Enriched with journal format + Foundation Day entry |
-| Repo branch | `main` (clean) |
-| Open PRs | 0 |
-| Active crons | 6 (new: memory compression) |
-| Skills loaded | collaboration-protocol, repository-maintenance, structured-evaluation-framework |
-| Airtable base | `app6l2hwxinBLwHCa (Untitled)` — 16 fields, token live |
-| Health check | Weekly auto-monitor active — flags at 85% memory or threshold breach |
-
----
-
-## 🩺 Health Monitor
-
-| Check | Threshold | Current | Status |
-|---|---|---|---|
-| Memory | < 85% | 45% | ✅ |
-| Crons | All running | 7 active | ✅ |
-| Hybrid DB | Running | 42 chunks, 6 files | ✅ |
-| Token budget | Monthly limit | Tracking | ✅ |
-| Disk | < 90% | TBD | ⏳ |
-
-*Weekly health check runs automatically. I flag proactively when any metric crosses a threshold.*
-
----
-
-*Dashboard auto-updates silently after significant interactions.*
-*Bookmark this — it's your 10-second "what are we even doing" answer.*
+| 08-07 | edge-lead-review paused (redundant w/ daily-edge-scan); followup-checker revived |
+| 08-07 | TT: KUIU dropped (D2C-only), Gerber added as 3rd demo; brand's own price = valid MAP ref |
+| 08-04 | Market-relative scorecard + sealed $50 gate (Brier/log-loss, red-cell rule) |
+| 08-04 | Track C (live sports) = fast-deciding paper lane; ledger made tamper-evident |
+| 08-04 | Arb refuted on REAL data (0 two-sided books on thin long-tail) |
