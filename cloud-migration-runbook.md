@@ -26,9 +26,13 @@ Run Hermes + all crons + pod + fleet as a 24/7 always-on service, independent of
 - `polymarket_us_client.py` — `load_creds()`/`authed()` degrade gracefully when `/opt/data/.polymarket-us-key` missing (public reads keyless; order ops 401 loudly).
 - `hermes-followup-checker.py` — module resolution now uses its own dir (`/opt/data/scripts`, where `hermes-followup.py` lives) instead of the dead `/opt/data/home/.hermes/scripts` path. Copies added to repo/scripts.
 - `followup-checker` cron — stale workdir cleared.
+- `hunt_live_runner.sh` — `uv run` → `python3` (uv not installed on droplet → exit 127 on every run; deps already satisfied in cron runtime). Deployed + drift-audited.
+- **TT fleet codebase RESTORED** — `/opt/data/project-tt/` was lost in migration (lived on Mac only); 9 files pulled from Mac `~/tt` via Funnel base64, git-committed. Weekly launchd agent verified loaded (next scan Sun 07:00).
+- **Hardening (from gpt-5 adversarial scrub)**: UFW active (default deny incoming, SSH only), 6GB swap added + fstab, unattended-upgrades installed, Postgres verified localhost-only (scram).
+- Model routing off OpenRouter (credits exhausted): CEO driver → deepseek-chat (jobs.json unpinned), compression → gpt-4o, titles → gpt-4o-mini, fallback → gpt-4o. Validated via fresh one-shot.
 
 ## OPEN ITEMS (Josh actions)
-1. **OpenRouter key weekly limit** — set to $10/wk, $0.70 left → `ceo-hourly-driver` (claude-sonnet-4) 402s. Raise limit to $25–50 at openrouter.ai/settings/keys (key ends ...188).
+1. ~~OpenRouter weekly limit~~ — **RESOLVED by re-routing** (CEO → deepseek-chat, all aux → OpenAI). OpenRouter top-up now OPTIONAL: only needed to restore the claude-sonnet-4 CEO driver later.
 2. **OneDrive re-auth** — source container (hermes@5f8e422c75d2) is gone; onedrive_graph.py + token were lost with it. Device-code flow: https://login.microsoft.com/device (client 14d82eec-204b-4c2f-b7e8-296a70dab67e). Helper to be rebuilt at `/opt/data/home/.config/hermy/onedrive_graph.py`.
 3. **polymarket.us signing key** — `/opt/data/.polymarket-us-key` missing (intentionally excluded from backups). Needed only for account/order ops; regenerate from the polymarket.us portal if order-capable jobs return.
 4. **Retire old droplet 157.230.163.72** (and confirm source container is destroyed) — stop paying.

@@ -71,4 +71,25 @@ for f in glob.glob(os.path.join(export_dir, "hermes-state-export-*.md")):
         os.remove(f)
         print(f"Removed old state export: {f}")
 
+# R2 offsite backup (Cloudflare) — primary off-box durability (no deps)
+R2KEYS = "/opt/data/tmp/.r2keys.env"
+if os.path.exists(R2KEYS):
+    try:
+        env = dict(os.environ)
+        for line in open(R2KEYS):
+            line = line.strip()
+            if line.startswith("export "):
+                k, _, v = line[7:].partition("=")
+                env[k.strip()] = v.strip()
+        up = subprocess.run(["python3", "/opt/data/scripts/r2_upload.py", ARCHIVE_PATH],
+                            capture_output=True, text=True, timeout=300, env=env)
+        if up.returncode == 0:
+            print(f"R2 uploaded: {up.stdout.strip()}")
+        else:
+            print(f"R2 upload failed: {up.stderr.strip()[:200]}")
+    except Exception as e:
+        print(f"R2 upload unavailable: {e}")
+else:
+    print("R2 upload unavailable: keys file not found")
+
 print("Backup complete.")
