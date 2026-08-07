@@ -14,13 +14,29 @@ ONEDRIVE_BACKUP = f"OneDrive/Hermy/_backups/{ARCHIVE_NAME}"
 os.makedirs(BACKUP_DIR, exist_ok=True)
 
 # Collect files to back up
+POD_DIR = os.path.join(HOME_DIR, "kalshi-pod")
 paths = [
-    os.path.join(HOME_DIR, ".hermes/config.yaml"),
+    os.path.join(HOME_DIR, "config.yaml"),          # the real Hermes config (NOT .hermes/config.yaml — that path does not exist on the droplet)
     os.path.join(HOME_DIR, ".env"),
     os.path.join(HOME_DIR, "skills"),
     os.path.join(REPO_DIR, "docs"),
     os.path.join(REPO_DIR, "scripts"),
+    os.path.join(HOME_DIR, ".hermes"),              # memory.md, watchdog state, cron scratch — the durable agent state
+    # ---- ENGINE DURABILITY (the whole prediction engine) ----
+    POD_DIR,   # all python + cases/ ledgers (track_record, pmus_paperlog, KXCPI, gate state) + RESTORE.md
+    # NOTE: the API signing credential (/opt/data/.polymarket-us-key) is
+    # intentionally NOT tarballed — live secret, KYC-recoverable via the
+    # polymarket.us portal (see RESTORE.md). Excluded in _filter below.
 ]
+
+# Exclude the raw credential + pyc from the pod tarball
+def _filter(tarinfo):
+    name = tarinfo.name
+    if name.endswith(".pyc") or "/__pycache__/" in name:
+        return None
+    if ".polymarket-us-key" in name:
+        return None  # never ship the signing secret in a cleartext tarball
+    return tarinfo
 
 existing = [p for p in paths if os.path.exists(p)]
 
@@ -30,7 +46,7 @@ if not existing:
 
 with tarfile.open(ARCHIVE_PATH, "w:gz") as tar:
     for path in existing:
-        tar.add(path, arcname=os.path.relpath(path, HOME_DIR))
+        tar.add(path, arcname=os.path.relpath(path, HOME_DIR), filter=_filter)
 
 print(f"Backup written: {ARCHIVE_PATH} ({os.path.getsize(ARCHIVE_PATH)} bytes)")
 
