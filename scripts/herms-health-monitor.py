@@ -8,6 +8,25 @@ import json, os, subprocess, sys, sqlite3, glob, time
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
+# --- Environment hardening (startup) -------------------------------------
+# The cron can run this script under the *system* python3 in a stripped env
+# where the hybrid-env site-packages is not on sys.path. That caused
+# intermittent "No module named 'chromadb'" / "No module named 'requests'"
+# false positives. Prepend the hybrid-env site-packages up front (same effect
+# as activating the venv) so every inline import AND every subprocess that
+# inherits this interpreter resolves deps. HOME may resolve differently in
+# cron (/opt/data) vs interactive (/opt/data/home) shells, so probe all roots.
+if not any(p for p in sys.path if os.path.isdir(os.path.join(p, "chromadb"))):
+    for _root in (os.environ.get("HOME", ""), "/opt/data/home", "/opt/data",
+                  "/opt/data/home/.hermes", "/opt/data/.hermes"):
+        _venv = os.path.join(_root, ".hermes", "hybrid-env")
+        for _sp in sorted(glob.glob(os.path.join(_venv, "lib", "python*", "site-packages"))):
+            if os.path.isdir(os.path.join(_sp, "chromadb")) and _sp not in sys.path:
+                sys.path.insert(0, _sp)
+                break
+        if any(p for p in sys.path if os.path.isdir(os.path.join(p, "chromadb"))):
+            break
+
 HOME = os.path.expanduser("~")
 REPO = "/opt/data/repo"
 HYBRID_DB = "/opt/data/.hybrid-db"
@@ -38,9 +57,19 @@ def check_crons():
 def find_venv_site_packages():
     """Locate the hybrid-env site-packages dir robustly.
     HOME can resolve differently between cron (/opt/data) and interactive
-    (/opt/data/home) shells, so fall back to candidate roots until found."""
+    (/opt/data/home) shells, so fall back to candidate roots until found.
+    Also check the *current interpreter's* own site-packages first — if this
+    script is already running inside hybrid-env (its python IS the venv python
+    or the venv site-packages is already on sys.path), no globbing is needed
+    and chromadb imports directly. This eliminates the intermittent
+    'No module named chromadb' false positive from HOME/environment drift."""
+    # 1) If chromadb already importable from current interpreter, use it as-is.
+    import importlib.util
+    if importlib.util.find_spec("chromadb") is not None:
+        return None  # signal: nothing to prepend, import works already
+    # 2) Otherwise fall back to locating the venv site-packages on disk.
     candidates = []
-    for root in (HOME, "/opt/data/home", "/opt/data"):
+    for root in (HOME, "/opt/data/home", "/opt/data", "/opt/data/home/.hermes"):
         p = os.path.join(root, ".hermes", "hybrid-env")
         if os.path.isfile(os.path.join(p, "bin", "activate")):
             candidates.append(p)
@@ -52,6 +81,11 @@ def find_venv_site_packages():
             matches = sorted(glob.glob(os.path.join(p, "lib", "python*", "site-packages")))
             if matches:
                 return matches[-1]  # most recent python version
+    # 3) Last resort: search the current interpreter's own path for a site-packages
+    #    dir that already contains chromadb (in case it's on a different venv).
+    for sp in sys.path:
+        if "site-packages" in sp and os.path.isdir(os.path.join(sp, "chromadb")):
+            return sp
     return None
 
 def check_chromadb():
@@ -132,9 +166,23 @@ def check_memory():
 def check_airtable_token():
     """Check Airtable token health by calling the health script."""
     import subprocess
+    # The monitor may be running under the system python3 (cron stripped env).
+    # The startup block prepends the hybrid-env site-packages to THIS process's
+    # sys.path, but a subprocess won't inherit that — it re-resolves imports
+    # from its own interpreter. So for the subprocess we must pick an actual
+    # python binary that can find 'requests': prefer the hybrid-env python.
+    py = None
+    for _root in (os.environ.get("HOME", ""), "/opt/data/home", "/opt/data"):
+        _venv_py = os.path.join(_root, ".hermes", "hybrid-env", "bin", "python")
+        if os.path.isfile(_venv_py):
+            py = _venv_py
+            break
+    if py is None:
+        # No hybrid-env found: only then fall back to current interpreter.
+        py = sys.executable if "requests" in sys.modules else "python3"
     try:
         r = subprocess.run(
-            ["python3", "/opt/data/repo/scripts/airtable-token-health.py"],
+            [py, "/opt/data/repo/scripts/airtable-token-health.py"],
             capture_output=True, text=True, timeout=15
         )
         if r.returncode == 0:

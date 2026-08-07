@@ -123,34 +123,8 @@ def main():
             (ENRICHMENT_DIR / "_index.json").write_text(json.dumps(ws_index, indent=2))
         print(f"  {len(ws_index['files'])} files, {len(ws_index['folders'])} folders")
 
-    # Sync key Josh Stuff files (not the full folder — skip DO NOT LOOK AT THESE HERMY)
-    if "Josh Stuff" in folder_map:
-        print("Syncing Josh Stuff (selected)...")
-        josh_items = children(folder_map["Josh Stuff"])
-        for item in josh_items:
-            name = item["name"]
-            # Skip the DO NOT LOOK AT THESE HERMY folder
-            if "DO NOT LOOK AT THESE" in name.upper():
-                print(f"  Skipping: {name}")
-                continue
-            if "folder" in item:
-                # Sync CRM_Docs and Fun with Rocks
-                if name in ("CRM_Docs", "Fun with Rocks"):
-                    sub_local = JOSH_STUFF_DIR / name
-                    ensure_dir(sub_local)
-                    if not args.dry_run:
-                        sync_folder(item["id"], sub_local, report)
-            elif "file" in item:
-                dl = item.get("@microsoft.graph.downloadUrl")
-                if not dl:
-                    meta = graph("GET", f"{GRAPH}/me/drive/items/{item['id']}")
-                    dl = meta.get("@microsoft.graph.downloadUrl")
-                if dl:
-                    dest = JOSH_STUFF_DIR / name
-                    download_file(dl, dest, report)
-        ws_index = build_index(JOSH_STUFF_DIR)
-        if not args.dry_run:
-            (JOSH_STUFF_DIR / "_index.json").write_text(json.dumps(ws_index, indent=2))
+    # BOUNDARY: Do NOT sync Josh Stuff/ — personal files, off-limits per workspace rules.
+    # Only strategy/ and enrichment/ folders are scoped for repo mirroring.
 
     # Summary
     print(f"\nSync complete:")
