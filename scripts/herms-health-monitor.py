@@ -16,11 +16,20 @@ from pathlib import Path
 # as activating the venv) so every inline import AND every subprocess that
 # inherits this interpreter resolves deps. HOME may resolve differently in
 # cron (/opt/data) vs interactive (/opt/data/home) shells, so probe all roots.
+# NOTE (Aug 8 2026): only prepend site-packages whose pythonX.Y matches the
+# RUNNING interpreter. chromadb/pydantic_core are compiled C-extensions; the
+# cron pre-run harness runs this script under the hermes-agent venv python
+# 3.11, and prepending hybrid-env's python3.12 site-packages onto a 3.11
+# interpreter makes `import pydantic_core` fail with
+# "No module named 'pydantic_core._pydantic_core'" (ABI mismatch).
+_PY_TAG = "python%d.%d" % sys.version_info[:2]
 if not any(p for p in sys.path if os.path.isdir(os.path.join(p, "chromadb"))):
     for _root in (os.environ.get("HOME", ""), "/opt/data/home", "/opt/data",
                   "/opt/data/home/.hermes", "/opt/data/.hermes"):
         _venv = os.path.join(_root, ".hermes", "hybrid-env")
         for _sp in sorted(glob.glob(os.path.join(_venv, "lib", "python*", "site-packages"))):
+            if _PY_TAG not in _sp:
+                continue  # ABI mismatch — would break compiled extensions
             if os.path.isdir(os.path.join(_sp, "chromadb")) and _sp not in sys.path:
                 sys.path.insert(0, _sp)
                 break
@@ -89,7 +98,41 @@ def find_venv_site_packages():
     return None
 
 def check_chromadb():
-    """Verify ChromaDB responds and has data."""
+    """Verify ChromaDB responds and has data.
+
+    chromadb + pydantic_core are compiled C-extensions. The cron pre-run
+    harness may execute this monitor under the hermes-agent venv python
+    (3.11); importing hybrid-env's 3.12 site-packages into that interpreter
+    fails with 'No module named pydantic_core._pydantic_core' (ABI
+    mismatch, Aug 8 2026). Fix: run the probe in a subprocess with the
+    hybrid-env python binary (ABI-matched), falling back to an in-process
+    import only when no hybrid-env python exists on disk (we're already
+    inside the right interpreter).
+    """
+    probe = (
+        "import json, chromadb\n"
+        "client = chromadb.PersistentClient(path=%r)\n"
+        "col = client.get_collection('hermes-hybrid')\n"
+        "print(json.dumps({'status': 'ok', 'chunks': col.count()}))\n"
+    ) % HYBRID_DB
+    py = None
+    for _root in (os.environ.get("HOME", ""), "/opt/data/home", "/opt/data"):
+        _cand = os.path.join(_root, ".hermes", "hybrid-env", "bin", "python")
+        if os.path.isfile(_cand):
+            py = _cand
+            break
+    if py is not None:
+        try:
+            r = subprocess.run([py, "-c", probe], capture_output=True,
+                               text=True, timeout=60)
+            if r.returncode == 0 and r.stdout.strip():
+                return json.loads(r.stdout.strip())
+            return {"status": "error",
+                    "message": (r.stderr.strip() or r.stdout.strip() or
+                                "chromadb probe failed")}
+        except Exception as e:
+            return {"status": "error", "message": str(e)}
+    # No hybrid-env python on disk: we're already in the right interpreter.
     try:
         sp = find_venv_site_packages()
         if sp:
